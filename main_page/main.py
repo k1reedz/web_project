@@ -17,18 +17,11 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/base")
-def base():
-    return render_template("base.html")
-
-
-# Обработчик регистрации
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
-            # пока используется временный шаблон
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Пароли не совпадают")
@@ -59,7 +52,6 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect("/")
-        # Форма логина еще не готова
         return render_template('login.html',
                                message="Неправильный логин или пароль",
                                form=form)

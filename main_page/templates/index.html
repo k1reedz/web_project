@@ -14,12 +14,21 @@
   <nav class="grey darken-4" role="navigation">
     <div class="nav-wrapper container">
       <a id="logo-container" href="#" class="brand-logo" style="color: #ffb700">Яндекс.Фитнес</a>
-      <ul class="right hide-on-med-and-down">
-        <li><a href="#" style="background: #ffb700">Войти</a></li>
-      </ul>
-      <ul class="right hide-on-med-and-down">
-        <li><a href="#" style="background: #b71b1b">Регистрация</a></li>
-      </ul>
+      {% if current_user.is_authenticated %}
+        <ul class="right hide-on-med-and-down">
+          <li><a class="right hide-on-med-and-down" href="#">{{ current_user.name }} {{ current_user.surname }}</a></li>
+        </ul>
+        <ul class="right hide-on-med-and-down">
+          <li><a class="right hide-on-med-and-down" href="/logout">Выйти</a></li>
+        </ul>
+      {% else %}
+        <ul class="right hide-on-med-and-down">
+          <li><a href="/login" style="background: #ffb700">Войти</a></li>
+        </ul>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="/register" style="background: #b71b1b">Регистрация</a></li>
+        </ul>
+      {% endif %}
     </div>
   </nav>
 
