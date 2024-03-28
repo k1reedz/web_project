@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Изменить</h1>
+<form method="post">
+    <input list="text" name="title">
+    <datalist id="text">
+        {% for item in products_list%}
+        <option value={{item}}></option>
+        {% endfor %}
+    </datalist>
+    <input type="number" placeholder="Масса" name="weight" value={{weight_text}}>
+    <input type="submit" value="Изменить">
+</form>
+<h2>{{inf}}</h2>
+{% endblock %}
