@@ -46,6 +46,7 @@ def diet():
         sum_fats += float(item.total_fats)
         sum_carbohydrates += float(item.total_carbohydrates)
     session.close()
+    print(current_date == date.today())
     return render_template("diet.html", products=products, today=date.today(), current_date=current_date,
                            sum_kcal=sum_kcal, sum_proteins=sum_proteins, sum_fats=sum_fats,
                            sum_carbohydrates=sum_carbohydrates)
@@ -64,22 +65,25 @@ def adding_a_product():
             try:
                 session = Session(bind=engine)
                 kcal, proteins, fats, carbohydrates = get_kpfc(title)
-                if session.query(Ration).filter(Ration.title == title).count() == 0:
-                    product = Ration(title=title, weight=weight,
-                                     total_kcal=str(float(kcal) * float(weight) / 100),
-                                     total_proteins=str(float(proteins) * float(weight) / 100),
-                                     total_fats=str(float(fats) * float(weight) / 100),
-                                     total_carbohydrates=str(float(carbohydrates) * float(weight) / 100))
+                if session.query(Ration).filter(Ration.title == title,
+                                                Ration.created_date == date.today()).count() == 0:
+                    product = Ration(title=title, weight=round(float(weight), 1),
+                                     total_kcal=str(round(float(kcal) * float(weight) / 100, 1)),
+                                     total_proteins=str(round(float(proteins) * float(weight) / 100, 1)),
+                                     total_fats=str(round(float(fats) * float(weight) / 100, 1)),
+                                     total_carbohydrates=str(round(float(carbohydrates) * float(weight) / 100, 1)),
+                                     created_date=date.today())
                     session.add(product)
                     session.commit()
                 else:
-                    product = session.query(Ration).filter(Ration.title == title).first()
-                    product.weight = str(product.weight + float(weight))
-                    product.total_kcal = str(float(product.total_kcal) + float(kcal) * float(weight) / 100)
-                    product.total_proteins = str(float(product.total_proteins) + float(proteins) * float(weight) / 100)
-                    product.total_fats = str(float(product.total_fats) + float(fats) * float(weight) / 100)
-                    product.total_carbohydrates = str(float(product.total_carbohydrates) + float(carbohydrates) * \
-                                                  float(weight) / 100)
+                    product = session.query(Ration).filter(Ration.title == title,
+                                                           Ration.created_date == date.today()).first()
+                    product.weight = str(round(product.weight + float(weight), 1))
+                    product.total_kcal = str(round(float(product.total_kcal) + float(kcal) * float(weight) / 100, 1))
+                    product.total_proteins = str(round(float(product.total_proteins) + float(proteins) * float(weight) / 100, 1))
+                    product.total_fats = str(round(float(product.total_fats) + float(fats) * float(weight) / 100, 1))
+                    product.total_carbohydrates = str(round(float(product.total_carbohydrates) + float(carbohydrates) * \
+                                                  float(weight) / 100, 1))
                     session.add(product)
                     session.commit()
                 return redirect("/diet")
@@ -108,11 +112,11 @@ def diet_change(id):
                 kcal, proteins, fats, carbohydrates = get_kpfc(title)
                 product.title = title
                 product.weight = weight
-                product.total_kcal = str(float(product.total_kcal) + float(kcal) * float(weight) / 100)
-                product.total_proteins = str(float(product.total_proteins) + float(proteins) * float(weight) / 100)
-                product.total_fats = str(float(product.total_fats) + float(fats) * float(weight) / 100)
-                product.total_carbohydrates = str(float(product.total_carbohydrates) + float(carbohydrates) *
-                                                  float(weight) / 100)
+                product.total_kcal = str(round(float(product.total_kcal) + float(kcal) * float(weight) / 100))
+                product.total_proteins = str(round(float(product.total_proteins) + float(proteins) * float(weight) / 100))
+                product.total_fats = str(round(float(product.total_fats) + float(fats) * float(weight) / 100))
+                product.total_carbohydrates = str(round(float(product.total_carbohydrates) + float(carbohydrates) *
+                                                  float(weight) / 100))
                 session.add(product)
                 session.commit()
                 return redirect("/diet")
