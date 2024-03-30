@@ -1,12 +1,19 @@
 from flask import Flask, render_template, redirect, request, abort, make_response, jsonify
 from data import db_session
 from data.users import User
+from data.goals import Goal
+from datetime import datetime
+import requests
+from data import goals_api
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms.user_form import RegisterForm, LoginForm
+from forms.goal_form import GoalForm
 
 
 app = Flask(__name__)
+address = "http://127.0.0.1:5000"
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.register_blueprint(goals_api.blueprint)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -58,9 +65,17 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
+
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get(user_id)
+    db_sess = db_session.create_session()
+    return db_sess.query(User).filter(User.id == user_id).first()
 
 
 @app.errorhandler(404)
@@ -71,6 +86,40 @@ def not_found(error):
 @app.errorhandler(400)
 def bad_request(_):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
+
+
+@app.route("/goals")
+def render_goals():
+    if not current_user.is_authenticated:
+        return redirect("/login")
+    goals = requests.get(f"{address}/api/goals/{str(current_user.id)}").json()["goals"]
+    return render_template("goals.html", goals=goals)
+
+
+@app.route("/add_goal", methods=["POST", "GET"])
+def add_goal():
+    if not current_user.is_authenticated:
+        return redirect("/login")
+    form = GoalForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        goal = Goal(
+            title=form.title.data,
+            description=form.description.data,
+            priority=form.priority.data,
+            finish_date=datetime.strptime(form.finish_date.data, "%d.%m.%Y"),
+            user_id=current_user.id
+        )
+        db_sess.add(goal)
+        db_sess.commit()
+        return redirect('/goals')
+    return render_template("goal_form.html", form=form)
+
+
+@app.route("/delete_goal/<int:goal_id>", methods=["DELETE", "POST", "GET"])
+def delete_goal(goal_id):
+    requests.delete(f"{address}/api/goal/{str(goal_id)}")
+    return redirect('/goals')
 
 
 def main():

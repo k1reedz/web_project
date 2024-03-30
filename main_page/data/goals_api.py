@@ -26,7 +26,7 @@ def get_goals():
 @blueprint.route("/api/goals/<int:user_id>", methods=['GET'])
 def get_goals_by_id(user_id):
     db_sess = db_session.create_session()
-    goals = db_sess.query(Goal).filter(Goal.user_id == user_id).fetchall()
+    goals = db_sess.query(Goal).filter(Goal.user_id == user_id).all()
     if not goals:
         return make_response(jsonify({'error': 'Not found'}), 404)
     return jsonify(
@@ -39,7 +39,7 @@ def get_goals_by_id(user_id):
 @blueprint.route("/api/goal/<int:goal_id>", methods=["GET"])
 def get_goal(goal_id):
     db_sess = db_session.create_session()
-    goal = db_sess.query(Goal).filter().first()
+    goal = db_sess.query(Goal).filter(Goal.id == goal_id).first()
     if not goal:
         return make_response(jsonify({'error': 'Not found'}), 404)
     return jsonify(
