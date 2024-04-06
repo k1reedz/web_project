@@ -5,6 +5,7 @@ from data.goals import Goal
 from datetime import datetime
 import requests
 from data import goals_api
+from data import tasks_api
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms.user_form import RegisterForm, LoginForm
 from forms.goal_form import GoalForm
@@ -14,6 +15,7 @@ app = Flask(__name__)
 address = "http://127.0.0.1:5000"
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.register_blueprint(goals_api.blueprint)
+app.register_blueprint(tasks_api.blueprint)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -92,7 +94,11 @@ def bad_request(_):
 def render_goals():
     if not current_user.is_authenticated:
         return redirect("/login")
-    goals = requests.get(f"{address}/api/goals/{str(current_user.id)}").json()["goals"]
+    goals = requests.get(f"{address}/api/goals/{str(current_user.id)}")
+    if goals.status_code == 200:
+        goals = goals.json()["goals"]
+    else:
+        goals = []
     return render_template("goals.html", goals=goals)
 
 
@@ -102,16 +108,15 @@ def add_goal():
         return redirect("/login")
     form = GoalForm()
     if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        goal = Goal(
-            title=form.title.data,
-            description=form.description.data,
-            priority=form.priority.data,
-            finish_date=datetime.strptime(form.finish_date.data, "%d.%m.%Y"),
-            user_id=current_user.id
-        )
-        db_sess.add(goal)
-        db_sess.commit()
+        data = {
+            "title": form.title.data,
+            "description": form.description.data,
+            "priority": form.priority.data,
+            "finish_date": form.finish_date.data,
+            "user_id": current_user.id,
+            "accomplished": False
+        }
+        print(requests.post(f"{address}/api/add_goal/", json=jsonify(data).json))
         return redirect('/goals')
     return render_template("goal_form.html", form=form)
 
@@ -120,6 +125,25 @@ def add_goal():
 def delete_goal(goal_id):
     requests.delete(f"{address}/api/goal/{str(goal_id)}")
     return redirect('/goals')
+
+
+@app.route("/done_goals", methods=["GET"])
+def render_done_goals():
+    if not current_user.is_authenticated:
+        return redirect("/login")
+    goals = requests.get(f"{address}/api/done_goals/{str(current_user.id)}")
+    if goals.status_code == 200:
+        goals = goals.json()["goals"]
+    else:
+        goals = []
+    return render_template("done_goals.html", goals=goals)
+
+
+@app.route("/finish_goal/<int:goal_id>", methods=["PUT", "GET"])
+def done_goal(goal_id):
+    print(requests.put(f"{address}/api/goal/{str(goal_id)}", json=jsonify({"accomplished": True, "finish_date":
+                                                                          datetime.now().date().strftime("%d.%m.%Y")}).json))
+    return redirect("/done_goals")
 
 
 def main():

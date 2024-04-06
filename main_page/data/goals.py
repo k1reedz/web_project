@@ -16,4 +16,5 @@ class Goal(SqlAlchemyBase, SerializerMixin):
     description = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     finish_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                     default=datetime.datetime.now)
+    accomplished = sqlalchemy.Column(sqlalchemy.BOOLEAN, default=False)
     user = orm.relationship('User')

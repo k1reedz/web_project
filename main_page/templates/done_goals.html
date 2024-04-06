@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Выполненные цели</h1>
+    <a href="/goals">Цели</a>
+    {% for item in goals %}
+    <div>
+        <h2>{{ item["title"]}}</h2>
+        <p>Описание: {{ item["description"] }}</p>
+        <p>Выполнена: {{item["finish_date"]}}</p>
+    </div>
+    {% endfor %}
+{% endblock %}
