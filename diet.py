@@ -46,7 +46,6 @@ def diet():
         sum_fats += float(item.total_fats)
         sum_carbohydrates += float(item.total_carbohydrates)
     session.close()
-    print(current_date == date.today())
     return render_template("diet.html", products=products, today=date.today(), current_date=current_date,
                            sum_kcal=sum_kcal, sum_proteins=sum_proteins, sum_fats=sum_fats,
                            sum_carbohydrates=sum_carbohydrates)
@@ -90,10 +89,10 @@ def adding_a_product():
             except:
                 abort(404)
         else:
-            return render_template("adding_a_product.html", products_list=products_list,
-                                   inf='Заполните все поля', title_text=title, weight_text=weight)
+            return render_template("diet_change.html", products_list=products_list,
+                                   inf='Заполните все поля', title_text='Добавить', weight_text=weight)
     else:
-        return render_template("adding_a_product.html", products_list=products_list)
+        return render_template("adding_a_product.html", products_list=products_list, title_text='Добавить')
 
 
 @app.route('/diet_change/<int:id>', methods=['GET', 'POST'])
@@ -124,9 +123,9 @@ def diet_change(id):
                 abort(404)
         else:
             return render_template("diet_change.html", products_list=products_list, inf='Заполните все поля',
-                                   title_text=title, weight_text=weight)
+                                   title_text='Изменить', weight_text=weight)
     else:
-        return render_template("diet_change.html", products_list=products_list)
+        return render_template("diet_change.html", products_list=products_list, title_text='Изменить')
 
 
 @app.route('/diet_delete/<int:id>', methods=['GET', 'POST'])
