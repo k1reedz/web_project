@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, request, abort, make_respons
 from data import db_session
 from data.users import User
 from data.goals import Goal
+
 from datetime import datetime
 import requests
 from data import goals_api
@@ -9,6 +10,7 @@ from data import tasks_api
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms.user_form import RegisterForm, LoginForm
 from forms.goal_form import GoalForm
+from forms.task_form import TaskForm
 
 
 app = Flask(__name__)
@@ -116,7 +118,7 @@ def add_goal():
             "user_id": current_user.id,
             "accomplished": False
         }
-        print(requests.post(f"{address}/api/add_goal/", json=jsonify(data).json))
+        requests.post(f"{address}/api/add_goal/", json=jsonify(data).json)
         return redirect('/goals')
     return render_template("goal_form.html", form=form)
 
@@ -141,9 +143,50 @@ def render_done_goals():
 
 @app.route("/finish_goal/<int:goal_id>", methods=["PUT", "GET"])
 def done_goal(goal_id):
-    print(requests.put(f"{address}/api/goal/{str(goal_id)}", json=jsonify({"accomplished": True, "finish_date":
-                                                                          datetime.now().date().strftime("%d.%m.%Y")}).json))
+    requests.put(f"{address}/api/goal/{str(goal_id)}", json=jsonify({"accomplished": True, "finish_date":
+                                                                          datetime.now().date().strftime("%d.%m.%Y")}).json)
     return redirect("/done_goals")
+
+
+@app.route("/schedule", methods=["GET", "POST"])
+def render_schedule():
+    if not current_user.is_authenticated:
+        return redirect("/login")
+    tasks = requests.get(f"{address}/api/tasks_weekday/{str(current_user.id)}")
+    if tasks.status_code != 200:
+        tasks = dict()
+    else:
+        tasks = tasks.json()
+    print(tasks)
+    form = TaskForm()
+    if form.validate_on_submit():
+        data = {
+            "task_name": form.name.data,
+            "weekday": form.weekday.data,
+            "start": form.start_time.data,
+            "end": form.end_time.data,
+            "user_id": current_user.id,
+        }
+        response = requests.post(f"{address}/api/task", json=jsonify(data).json)
+        if response.status_code != 200:
+            error_type = response.json()["error"]
+            if error_type == "Time format error":
+                message = "Неправильный формат времени"
+            elif error_type == "Time span is busy":
+                message = "Промежуток времени уже занят"
+            else:
+                message = "Ошибка"
+        else:
+            message = "Событие успешно добавлено"
+    else:
+        message = ""
+    return render_template("schedule.html", form=form, tasks=tasks, message=message)
+
+
+@app.route("/delete_task/<int:task_id>", methods=["DELETE", "GET"])
+def delete_task(task_id):
+    requests.delete(f"{address}/api/task/{str(task_id)}")
+    return redirect('/schedule')
 
 
 def main():

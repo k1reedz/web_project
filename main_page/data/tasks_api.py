@@ -56,9 +56,10 @@ def get_weekday_tasks(user_id):
     tasks = get_tasks_by_id(user_id)
     if tasks.status_code == 404:
         return make_response(jsonify({'error': 'Not found'}), 404)
-    result = {}
-    for task in tasks["tasks"]:
-        result[task["weekday"]] = result.get(task["weekday"], []) + [task]
+    result = {"Понедельник": [], "Вторник": [], "Среда": [], "Четверг": [],
+              "Пятница": [], "Суббота": [], "Воскресенье": []}
+    for task in tasks.json["tasks"]:
+        result[task["weekday"]].append(task)
     return result
 
 
@@ -70,32 +71,33 @@ def add_task():
                                                  "weekday"]):
         return make_response(jsonify({'error': 'Bad request'}), 400)
     other_tasks = get_tasks_by_id(request.json["user_id"])
+    try:
+        start1, end1 = datetime.strptime(request.json["start"], "%H:%M"), \
+                       datetime.strptime(request.json["end"], "%H:%M")
+    except ValueError:
+        return make_response(jsonify({"error": "Time format error"}), 400)
     if other_tasks.status_code != 404:
-        try:
-            start1, end1 = datetime.strptime(request.json["start"], "%H:%M"), \
-                                   datetime.strptime(request.json["end"], "%H:%M")
-        except ValueError:
-            return make_response(jsonify({"error": "Time format error"}), 400)
-        for task in other_tasks:
-            start2, end2 = task["start"], task["end"]
-            if start2 <= start1 < end2 or start2 < end1 <= end2:
-                return make_response(jsonify({"error": "Time span is busy"}), 400)
+        for task in other_tasks.json["tasks"]:
+            if task["weekday"] == request.json["weekday"]:
+                start2, end2 = datetime.strptime(task["start"], "%H:%M"), datetime.strptime(task["end"], "%H:%M")
+                if start2 <= start1 < end2 or start2 < end1 <= end2:
+                    return make_response(jsonify({"error": "Time span is busy"}), 400)
 
     db_sess = db_session.create_session()
     task = Task(
         task_name=request.json["task_name"],
         user_id=request.json["user_id"],
-        start=request.json["start"].time(),
-        end=request.json["end"].time(),
+        start=start1.time(),
+        end=end1.time(),
         weekday=request.json["weekday"]
     )
     db_sess.add(task)
     db_sess.commit()
-    return jsonify({"id": task.id})
+    return make_response(jsonify({"success": "OK"}), 200)
 
 
-@blueprint.route("/api/goal/<int:task_id>", methods=["DELETE"])
-def delete_goal(task_id):
+@blueprint.route("/api/task/<int:task_id>", methods=["DELETE"])
+def delete_task(task_id):
     db_sess = db_session.create_session()
     task = db_sess.query(Task).filter(Task.id == task_id).first()
     if not task:

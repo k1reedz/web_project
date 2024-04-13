@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Расписание</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <span>
+            {{ form.name.label }}<br>
+            {{ form.name(class="form-control") }}<br>
+            {% for error in form.name.errors %}
+        <span class="alert alert-danger" role="alert">
+            {{ error }}
+        </span>
+        {% endfor %}
+        </span>
+        <span>
+            {{ form.weekday.label }}
+            {{ form.weekday}}<br>
+            {% for error in form.weekday.errors %}
+        <span class="alert alert-danger" role="alert">
+            {{ error }}
+        </span>
+        {% endfor %}
+        </span>
+        <span>
+            {{ form.start_time.label }}<br>
+            {{ form.start_time(class="form-control") }}<br>
+            {% for error in form.start_time.errors %}
+        <span class="alert alert-danger" role="alert">
+            {{ error }}
+        </span>
+        {% endfor %}
+        </span>
+        <span>
+            {{ form.end_time.label }}<br>
+            {{ form.end_time(class="form-control") }}<br>
+            {% for error in form.end_time.errors %}
+        <span class="alert alert-danger" role="alert">
+            {{ error }}
+        </span>
+        {% endfor %}
+        </span>
+        <span>{{ form.submit(type="submit", class="btn btn-primary") }}</span>
+        {{message}}
+    </form>
+    <br>
+    <button type="button" class="btn btn-primary">Для удаления события нажмите на его название</button>>
+    <br>
+    <table>
+        <tr>
+            <th>Время/День</th>
+            <th>Понедельник</th>
+            <th>Вторник</th>
+            <th>Среда</th>
+            <th>Четверг</th>
+            <th>Пятница</th>
+            <th>Суббота</th>
+            <th>Воскресенье</th>
+        </tr>
+        {% for counter in range(5, 24) %}
+            <tr>
+                <th>{{counter}}:00-{{counter + 1}}:00</th>
+                <th>
+                    {% for task in tasks["Понедельник"] %}
+                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int <= (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
+                            <form action="/delete_task/{{task['id']}}">
+                                <button type="submit" class="btn btn-primary">{{ task["task_name"] }}</button>
+                            </form>
+                            <p>{{ task["start"] }}-{{ task["end"]}}</p>
+                        {% endif %}
+                    {% endfor %}
+                </th>
+                <th>
+                    {% for task in tasks["Вторник"] %}
+                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int <= (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
+                            <form action="/delete_task/{{task['id']}}">
+                                <button type="submit" class="btn btn-primary">{{ task["task_name"] }}</button>
+                            </form>
+                            <p>{{ task["start"] }}-{{ task["end"]}}</p>
+                        {% endif %}
+                    {% endfor %}
+                </th>
+                <th>
+                    {% for task in tasks["Среда"] %}
+                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int <= (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
+                            <form action="/delete_task/{{task['id']}}">
+                                <button type="submit" class="btn btn-primary">{{ task["task_name"] }}</button>
+                            </form>
+                            <p>{{ task["start"] }}-{{ task["end"]}}</p>
+                        {% endif %}
+                    {% endfor %}
+                </th>
+                <th>
+                    {% for task in tasks["Четверг"] %}
+                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int <= (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
+                            <form action="/delete_task/{{task['id']}}">
+                                <button type="submit" class="btn btn-primary">{{ task["task_name"] }}</button>
+                            </form>
+                            <p>{{ task["start"] }}-{{ task["end"]}}</p>
+                        {% endif %}
+                    {% endfor %}
+                </th>
+                <th>
+                    {% for task in tasks["Пятница"] %}
+                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int <= (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
+                           <form action="/delete_task/{{task['id']}}">
+                                <button type="submit" class="btn btn-primary">{{ task["task_name"] }}</button>
+                           </form>
+                            <p>{{ task["start"] }}-{{ task["end"]}}</p>
+                        {% endif %}
+                    {% endfor %}
+                </th>
+                <th>
+                    {% for task in tasks["Суббота"] %}
+                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int <= (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
+                            <form action="/delete_task/{{task['id']}}">
+                                <button type="submit" class="btn btn-primary">{{ task["task_name"] }}</button>
+                            </form>
+                            <p>{{ task["start"] }}-{{ task["end"]}}</p>
+                        {% endif %}
+                    {% endfor %}
+                </th>
+                <th>
+                    {% for task in tasks["Воскресенье"] %}
+                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int <= (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
+                            <form action="/delete_task/{{task['id']}}">
+                                <button type="submit" class="btn btn-primary">{{ task["task_name"] }}</button>
+                            </form>
+                            <p>{{ task["start"] }}-{{ task["end"]}}</p>
+                        {% endif %}
+                    {% endfor %}
+                </th>
+            </tr>
+        {% endfor %}
+    </table>
+    <style type="text/css">
+        select {
+            display: block;
+        }
+        .table {
+            border-collapse: collapse;
+            margin: 20px auto;
+            background-color: #fff;
+            border: 2px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: center;
+        }
+        button {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+    </style>
+{% endblock %}
