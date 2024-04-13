@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>учёт здоровья</title>
+  <style>
+    /* Пользовательский стиль для радиокнопок */
+    .with-gap:checked + label:after {
+      border-color: #FFFF00; /* Жёлтый цвет */
+    }
+
+    /* Стиль для текста в полях ввода */
+    input[type="number"],
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="url"],
+    input[type="tel"],
+    input[type="search"],
+    input[type="time"],
+    input[type="date"],
+    input[type="datetime"],
+    input[type="datetime-local"],
+    input[type="month"],
+    input[type="week"],
+    input[type="color"],
+    textarea.materialize-textarea {
+      color: #ffffff; /* Белый цвет */
+    }
+  </style>
+
+  <!-- CSS  -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+  <style>
+    /* Пользовательский стиль для радиокнопок */
+    .with-gap:checked + label:after {
+      border-color: #FFFF00; /* Жёлтый цвет */
+    }
+  </style>
+</head>
+<body style="background: rgb(33,33,33)">
+<nav>
+  <div class="nav-wrapper" style="background: rgb(33,33,33)">
+    <a href="#!" class="brand-logo" style="padding-left: 30px; font-size: 50px; color: #ffb700">Яндекс.Фитнес</a>
+    <ul class="right right hide-on-med-and-down">
+      <li><a class="waves-effect waves-light btn" href="#!" style="background: #b71b1b">Здоровье <i class="material-icons right">healing</i></a></li>
+      <li><a class="waves-effect waves-light btn" href="#!" style="background: #b71b1b">Питание <i class="material-icons right">local_dining</i></a></li>
+      <li><a class="waves-effect waves-light btn" href="#!" style="background: #b71b1b">Фитнес <i class="material-icons right">fitness_center</i></a></li>
+      <li><a class="waves-effect waves-light btn" href="#!" style="background: #b71b1b">Цели <i class="material-icons right">stars</i></a></li>
+      <li><a class="waves-effect waves-light btn" href="#!" style="background: #b71b1b">Советы <i class="material-icons right">wb_incandescent</i></a></li>
+      <li><a class="waves-effect waves-light btn" href="#!" style="background: #b71b1b">Профиль <i class="material-icons right">person</i></a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container" style="margin-top: 50px; background: rgba(0, 0, 0, 0.2)">
+  <form action="/submit" method="post">
+    <div class="input-field">
+      <input id="weight" type="number" step="0.1" min="0" class="validate" name="weight">
+      <label for="weight" style="color: #ffffff">Вес (кг)</label>
+    </div>
+    <div class="input-field">
+      <input id="steps" type="number" step="1" min="0" class="validate" name="steps">
+      <label for="steps" style="color: #ffffff">Пройденные шаги</label>
+    </div>
+    <div class="input-field">
+      <input id="water" type="number" step="0.100" min="0" class="validate" name="water">
+      <label for="water" style="color: #ffffff">Выпито воды (Литры)</label>
+    </div>
+    <div class="input-field">
+      <input id="mental" type="number" step="1" min="1" max='12' class="validate tooltipped" data-position="bottom" data-tooltip="
+      Чтобы определить свой уровень стресса:<br/>
+      Оцените эмоции: Обратите внимание на чувства тревоги, раздражительности, усталости и печали.<br/>
+      Заметьте физические проявления: Учтите головные боли, мышечное напряжение, проблемы со сном и изменения в аппетите.<br/>
+      Отметьте изменения в поведении: Обратите внимание на избегание общественных событий, увеличение потребления алкоголя или курения и изменение активности.<br/>
+      Оцените по шкале: После оценки каждого аспекта, присвойте оценки и суммируйте их.<br/>
+      Определите уровень стресса:<br/> Низкий (0-4)<br/> умеренный (5-8)<br/> высокий (9-12)." name="mental">
+      <label for="mental" style="color: #ffffff">Уровень стресса</label>
+    </div>
+    <div class="input-field">
+      <input id="heart-rate" type="number" class="validate" name="heart_rate">
+      <label for="heart-rate" style="color: #ffffff">Сердцебиение (ударов в минуту)</label>
+    </div>
+    <p style="color: grey">Активность:</p>
+    <p>
+      <label style="color: #ffffff">
+        <input name="activity" type="radio" value="1" checked />
+        <span>Низкая</span>
+      </label>
+    </p>
+    <p>
+      <label style="color: #ffffff">
+        <input name="activity" type="radio" value="2"  />
+        <span>Средняя</span>
+      </label>
+    </p>
+    <p>
+      <label  style="color: #ffffff">
+        <input name="activity" type="radio" value="3" />
+        <span>Высокая</span>
+      </label>
+    </p>
+    <button class="btn waves-effect  red waves-light" type="submit" name="action">Отправить</button>
+  </form>
+</div>
+<h1 style="text-align: center; color: white;">Визуализация здоровья</h1>
+    <div style="text-align: center;">
+        <!-- Отображаем графики из файла -->
+        <img src="{{ image_file }}" alt="Графики здоровья">
+    </div>
+<!--  Scripts-->
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+  $(document).ready(function(){
+    // Инициализация tooltips
+    $('.tooltipped').tooltip();
+  });
+</script>
+</body>
+</html>
