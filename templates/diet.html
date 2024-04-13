@@ -1,31 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-<a href="/diet/adding_a_product" class="btn btn-outline-success">
-            Добавить продукт в рацион
-</a>
-Итог: {{sum_kcal}} ккал. {{sum_proteins}}г. белков {{sum_fats}}г. жиров {{sum_carbohydrates}}г. углеводов
-<form method="post">
-    <input type="date" id="start" name="input_date"
-           value={{current_date}} min="2024-01-01" max={{today}} />
-    <input type="submit" value="Подтвердить">
-</form>
-<h1>Записи в блоге</h1>
-{% for item in products%}
-<div class="col-md6 border rounded">
-    <h2>{{item.title}}</h2>
-    <div>
-        {{item.weight}}гр.
+ <head>
+     <link rel="stylesheet" type="text/css" href="static/css/style.css"/>
+ </head>
+<body>
+    <a href="/diet/adding_a_product" class="btn btn-outline-success">
+                Добавить продукт в рацион
+    </a>
+    <font>Итог: {{sum_kcal}} ккал. {{sum_proteins}}г. белков {{sum_fats}}г. жиров {{sum_carbohydrates}}г. углеводов</font>
+    <form method="post">
+        <input type="date" id="start" name="input_date" style="background-color: rgb(44,44,44); color: white"
+               value={{current_date}} min="2024-01-01" max={{today}} />
+        <input type="submit" value="Подтвердить" style="background-color: rgb(44,44,44); color: white">
+    </form>
+    <h1>Записи в блоге</h1>
+    {% for item in products%}
+    <div class="col-md6 border rounded">
+        <h2>{{item.title}}</h2>
+            <font>
+                {{item.weight}}гр.
+                {{item.total_kcal}} ккал. {{item.total_proteins}}г. белков {{item.total_fats}}г. жиров {{item.total_carbohydrates}}г. углеводов
+            </font>
+        <div>
+            <a href="/diet_change/{{item.id}}" class="btn btn-outline-warning">
+                Изменить
+            </a>
+            <a href="/diet_delete/{{item.id}}" class="btn btn-outline-danger">
+                Удалить
+            </a>
+        </div>
     </div>
-    {{item.total_kcal}} ккал. {{item.total_proteins}}г. белков {{item.total_fats}}г. жиров {{item.total_carbohydrates}}г. углеводов
-    <div>
-        <a href="/diet_change/{{ item.id }}" class="btn btn-outline-warning">
-            Изменить
-        </a>
-        <a href="/diet_delete/{{ item.id }}" class="btn btn-outline-danger">
-            Удалить
-        </a>
-    </div>
-</div>
-{% endfor %}
+    {% endfor %}
+</body>
 {% endblock %}
