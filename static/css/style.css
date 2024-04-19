@@ -1,0 +1,32 @@
+b {
+     font-size: 20px;
+     color: white
+}
+
+body {
+     background-color: rgb(33,33,33)
+}
+
+p {
+  color: white
+}
+
+.icon-block {
+  padding: 0 15px;
+}
+
+.icon-block .material-icons {
+	font-size: inherit;
+}
+
+h1 {
+   color: white
+}
+
+h2 {
+   color: white
+}
+
+font {
+     color: white
+}
