@@ -55,13 +55,13 @@
         <div class="card" style="background-color: rgba(0, 0, 0, 0.1)">
             <div class="card-content">
                 <span class="card-title" style="color: white">Текущая информация о профиле</span>
-                <p style="color: white"><strong>Имя:</strong> {{ user.username }}</p>
+                <p style="color: white"><strong>Имя:</strong> {{ user.name }}</p>
                 <p style="color: white"><strong>Email:</strong> {{ user.email }}</p>
-                <p style="color: white"><strong>Возраст:</strong> {{ user.age }}</p>
-                <p style="color: white"><strong>Пол:</strong> {{ user.gender }}</p>
-                <p style="color: white"><strong>Рост:</strong> {{ user.height }}</p>
-                <p style="color: white"><strong>О себе:</strong> {{ user.about_me }}</p>
-                <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}" alt="Profile Image" style="max-width: 80%; float: right; margin-top: -186px">
+                <p style="color: white"><strong>Возраст:</strong> {{ user.stats["age"] }}</p>
+                <p style="color: white"><strong>Пол:</strong> {{ user.stats["gender"] }}</p>
+                <p style="color: white"><strong>Рост:</strong> {{ user.stats["height"] }}</p>
+                <p style="color: white"><strong>О себе:</strong> {{ user.stats["about"] }}</p>
+                <img src="{{ url_for('static', filename='uploads/' + user.stats['profile_image']) }}" alt="Profile Image" style="max-width: 80%; float: right; margin-top: -186px">
             </div>
         </div>
     </div>
@@ -73,7 +73,7 @@
       <input type="hidden" name="user_id" value="{{ user.id }}">
       <div class="row">
         <div class="input-field col s6">
-          <input id="username" type="text" class="validate" name="username" value="{{ user.username }}">
+          <input id="username" type="text" class="validate" name="username" value="{{ user.name }}">
           <label for="username">Имя</label>
         </div>
         <div class="input-field col s6">
@@ -83,21 +83,21 @@
       </div>
       <div class="row">
         <div class="input-field col s6">
-          <input id="age" type="number" class="validate" name="age" value="{{ user.age }}">
+          <input id="age" type="number" class="validate" name="age" value="{{ user.stats['age'] }}">
           <label for="age">Возраст</label>
         </div>
         <div class="input-field col s6">
-          <input id="gender" type="text" class="validate" name="gender" value="{{ user.gender }}">
+          <input id="gender" type="text" class="validate" name="gender" value="{{ user.stats['gender'] }}">
           <label for="gender">Пол</label>
         </div>
       </div>
       <div class="row">
         <div class="input-field col s6">
-          <input id="height" type="text" class="validate" name="height" value="{{ user.height }}">
+          <input id="height" type="text" class="validate" name="height" value="{{ user.stats['height'] }}">
           <label for="height">Рост</label>
         </div>
         <div class="input-field col s12">
-          <textarea id="about_me" class="materialize-textarea" name="about_me">{{ user.about_me }}</textarea>
+          <textarea id="about_me" class="materialize-textarea" name="about_me">{{ user.stats['about'] }}</textarea>
           <label for="about_me">О себе</label>
         </div>
       </div>

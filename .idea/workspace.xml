@@ -1,7 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="588fa73e-a5a2-4265-9ca3-892c40a47300" name="Default Changelist" comment="" />
+    <list default="true" id="588fa73e-a5a2-4265-9ca3-892c40a47300" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/instance/health_data.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/data/__all_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/__all_models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/data/db_session.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/db_session.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/data/goals.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/goals.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/data/goals_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/goals_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/data/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/tasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/data/tasks_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/tasks_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/data/users.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/users.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/db/users.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/forms/goal_form.py" beforeDir="false" afterPath="$PROJECT_DIR$/forms/goal_form.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/forms/task_form.py" beforeDir="false" afterPath="$PROJECT_DIR$/forms/task_form.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/forms/user_form.py" beforeDir="false" afterPath="$PROJECT_DIR$/forms/user_form.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/static/cats-gym.gif" beforeDir="false" afterPath="$PROJECT_DIR$/static/cats-gym.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/static/css/materialize.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/static/css/materialize.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/static/css/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/static/dar3kkaa-thomas-shelby.gif" beforeDir="false" afterPath="$PROJECT_DIR$/static/dar3kkaa-thomas-shelby.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/static/js/init.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/static/js/materialize.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/static/js/materialize.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/static/rock-what.gif" beforeDir="false" afterPath="$PROJECT_DIR$/static/rock-what.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/templates/base.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/templates/done_goals.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/done_goals.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/templates/goal_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/goal_form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/templates/goals.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/goals.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/templates/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_page/templates/schedule.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/schedule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profile.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,8 +51,22 @@
       </list>
     </option>
   </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2eBcS0SpBY08GPat5yTota4Jaki" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -23,18 +74,56 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../third_lesson" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/User/Desktop/project/web_project/templates",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\User\Desktop\project\web_project\templates" />
       <recent name="C:\Users\User\Desktop\project\web_project\main_page\templates" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\User\Desktop\project\web_project\instance" />
+      <recent name="C:\Users\User\Desktop\project\web_project\templates" />
+      <recent name="C:\Users\User\Desktop\project\web_project" />
+      <recent name="C:\Users\User\Desktop\project\web_project\static" />
+      <recent name="C:\Users\User\Desktop\project\web_project\forms" />
+    </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main (1)">
+    <configuration name="main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="web_project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="web_project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -47,7 +136,8 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main_page/main.py" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\User\Desktop\project\web_project\main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -58,6 +148,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main (1)" />
         <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
@@ -70,7 +161,25 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1711381407756</updated>
+      <workItem from="1713536673483" duration="12967000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/users_db$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1713550017312" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
