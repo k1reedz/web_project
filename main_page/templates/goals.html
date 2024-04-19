@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Ваши цели</h1>
+    <a href="/done_goals">Выполненные цели</a>
+    <a href="/add_goal">Добавить цель</a>
+    {% for item in goals %}
+    <div>
+        <h2>{{ item["title"]}}</h2>
+        <p>Приоритет выполнения: {{ item["priority"]}}</p>
+        <p>Описание: {{ item["description"] }}</p>
+        <p>Дата выполнения: {{item["finish_date"]}}</p>
+        <a href="/delete_goal/{{item['id']}}">Удалить цель</a>
+        <a href="/finish_goal/{{item['id']}}">Цель достигнута</a>
+    </div>
+    {% endfor %}
+{% endblock %}
