@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="color: white; font-size: 2em; text-align: center">
+    <h1>Советы для вашего здоровья</h1>
+    {% if advice %}
+        <ul>
+        {% for item in advice %}
+            <li>{{ item }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>На основе ваших данных всё в порядке!</p>
+    {% endif %}
+</div>
+{% endblock %}
