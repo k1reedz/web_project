@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <head>
+     <link rel="stylesheet" type="text/css" href="static/css/style.css" />
+ </head>
+ <body>
+    <h1>{{page_title}} тренировку</h1>
+    <form method="post">
+        <div>
+            <input type="text" name="title" placeholder="Название" value={{title_text}}>
+            <input type="text" name="type" placeholder="Тип" value={{type_text}}>
+        </div>
+        <div>
+            <input type="time" name="start" value={{start_text}}>-<input type="time" name="end" value={{end_text}}>
+        </div>
+        <input type="submit" value={{page_title}}>
+    </form>
+    <h2>{{inf}}</h2>
+ </body>
+{% endblock %}

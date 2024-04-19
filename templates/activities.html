@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <head>
+     <link rel="stylesheet" type="text/css" href="static/css/style.css" />
+ </head>
+ <body>
+    <div>
+        <a href="/activities_previous" class="btn btn-outline-danger">
+                <
+        </a>
+        <a href="/activities_next" class="btn btn-outline-danger">
+                >
+        </a>
+    </div>
+
+    {% for activity in week_activities %}
+        {% set index = loop.index0 %}
+            <div class="col-md6 border rounded" style="margin-top: 10px;">
+                <p><b>{{weekdays[index]}}</b> {{week[index]}}
+                <a href="/adding_a_training/{{week[index]}}" class="btn btn-outline-success" style="float: right;">
+                    Добавить
+                </a>
+                </p>
+                {% if activity%}
+                    {% for training in activity%}
+                    <div style="margin-left: 20px; margin-bottom: 5px">
+                        <p>
+                        Название - {{training.title}}, тип - {{training.type}}<br/>
+                        {{training.start}} - {{training.end}}<br/>
+                        <a href="/activities_change/{{training.id}}" class="btn btn-outline-warning">
+                        Изменить
+                        </a>
+                        <a href="/activities_delete/{{training.id}}" class="btn btn-outline-danger">
+                        Удалить
+                        </a>
+                        </p>
+                    </div>
+
+                    {% endfor %}
+                {% else%}
+                    <b>-</b>
+                {% endif %}
+            </div>
+    {% endfor %}
+ </body>
+{% endblock %}
