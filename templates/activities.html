@@ -1,44 +1,78 @@
 {% extends "base2.html" %}
 
 {% block content %}
- <body>
+<style>
+    body {
+        color: white; /* Устанавливаем белый цвет текста */
+        background-color: #333; /* Темный фон для контраста */
+    }
+
+    .btn {
+        background-color: #ffb700; /* Жёлтый фон кнопок */
+        border: none; /* Убираем границу */
+        color: white; /* Белый цвет текста кнопок */
+        padding: 8px 16px; /* Отступы внутри кнопок */
+        margin-right: 10px; /* Отступ справа для кнопок */
+        text-decoration: none; /* Без подчеркивания для ссылок */
+        transition: background-color 0.3s, color 0.3s; /* Плавное изменение цвета */
+    }
+
+    .btn:hover {
+        background-color: #ffea00; /* Жёлтый фон при наведении */
+    }
+
+    .border {
+        padding: 10px; /* Отступы внутри контейнера */
+        margin-bottom: 20px; /* Отступ снизу для контейнеров */
+    }
+
+    .rounded {
+        border-radius: 8px; /* Скругленные углы */
+    }
+
+    p {
+        margin-bottom: 10px; /* Отступ снизу для абзацев */
+    }
+</style>
+
+<body>
     <div>
-        <a href="/activities_previous" class="btn btn-outline-danger">
-                <
+        <a href="/activities_previous" class="btn">
+            <
         </a>
-        <a href="/activities_next" class="btn btn-outline-danger">
-                >
+        <a href="/activities_next" class="btn">
+            >
         </a>
     </div>
 
     {% for activity in week_activities %}
-        {% set index = loop.index0 %}
-            <div class="col-md6 border rounded" style="margin-top: 10px;">
-                <p><b>{{weekdays[index]}}</b> {{week[index]}}
-                <a href="/adding_a_training/{{week[index]}}" class="btn btn-outline-success" style="float: right;">
-                    Добавить
+    {% set index = loop.index0 %}
+    <div class="col-md6 border rounded" style="margin-top: 10px;">
+        <p><b>{{weekdays[index]}}</b> {{week[index]}}
+            <a href="/adding_a_training/{{week[index]}}" class="btn" style="float: right;">
+                Добавить
+            </a>
+        </p>
+        {% if activity %}
+        {% for training in activity %}
+        <div style="margin-left: 20px; margin-bottom: 5px">
+            <p>
+                Название - {{training.title}}, тип - {{training.type}}<br/>
+                {{training.start}} - {{training.end}}<br/>
+                <a href="/activities_change/{{training.id}}" class="btn">
+                    Изменить
                 </a>
-                </p>
-                {% if activity%}
-                    {% for training in activity%}
-                    <div style="margin-left: 20px; margin-bottom: 5px">
-                        <p>
-                        Название - {{training.title}}, тип - {{training.type}}<br/>
-                        {{training.start}} - {{training.end}}<br/>
-                        <a href="/activities_change/{{training.id}}" class="btn btn-outline-warning">
-                        Изменить
-                        </a>
-                        <a href="/activities_delete/{{training.id}}" class="btn btn-outline-danger">
-                        Удалить
-                        </a>
-                        </p>
-                    </div>
+                <a href="/activities_delete/{{training.id}}" class="btn">
+                    Удалить
+                </a>
+            </p>
+        </div>
 
-                    {% endfor %}
-                {% else%}
-                    <b>-</b>
-                {% endif %}
-            </div>
+        {% endfor %}
+        {% else %}
+        <b>-</b>
+        {% endif %}
+    </div>
     {% endfor %}
- </body>
+</body>
 {% endblock %}
