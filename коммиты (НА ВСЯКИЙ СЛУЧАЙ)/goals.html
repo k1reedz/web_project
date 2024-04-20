@@ -1,0 +1,58 @@
+{% extends "base2.html" %}
+
+{% block content %}
+    <style type="text/css">
+        /* Стиль для текста в блоке содержимого */
+        h1, h2, p, a {
+            color: white; /* Устанавливаем цвет текста на белый */
+        }
+
+        /* Стили для карточек */
+        .card-container {
+            display: flex; /* Располагаем карточки в строку */
+            flex-wrap: wrap; /* Разрешаем перенос строк */
+            justify-content: space-between; /* Выравниваем карточки по ширине контейнера */
+        }
+
+        .card {
+            width: calc(33.33% - 20px); /* Ширина карточки (33.33% от ширины контейнера) */
+            margin-bottom: 20px; /* Внешний отступ снизу */
+            padding: 20px; /* Внутренний отступ */
+            background-color: #333; /* Цвет фона карточки */
+            border-radius: 10px; /* Радиус скругления углов */
+        }
+
+        .card h2 {
+            margin-top: 0; /* Убираем верхний отступ у заголовка */
+        }
+
+        .card p {
+            margin-bottom: 10px; /* Внешний отступ снизу у параграфа */
+        }
+
+        .card a {
+            color: white; /* Цвет текста ссылок внутри карточки */
+            text-decoration: none; /* Убираем подчеркивание у ссылок */
+        }
+
+        .card a:hover {
+            text-decoration: underline; /* Подчеркиваем ссылки при наведении */
+        }
+    </style>
+
+    <h1>Ваши цели</h1>
+    <a class="waves-effect waves-light btn-large" href="/done_goals" style="background: #ffb700"><i class="material-icons left">done_all</i>Выполненные</a>
+    <a class="btn-floating btn-large waves-effect waves-light red" href="/add_goal"><i class="material-icons">add</i></a>
+    <div class="card-container">
+        {% for item in goals %}
+            <div class="card">
+                <h2>{{ item["title"]}}</h2>
+                <p>Приоритет выполнения: {{ item["priority"]}}</p>
+                <p>Описание: {{ item["description"] }}</p>
+                <p>Дата выполнения: {{item["finish_date"]}}</p>
+                <a class="waves-effect waves-light btn-small" href="/delete_goal/{{item['id']}}" style="background: #F44336"><i class="material-icons left">delete</i>Удалить цель</a>
+                <a class="waves-effect waves-light btn-small" href="/finish_goal/{{item['id']}}" style="background: #ffb700"><i class="material-icons left">done</i>Цель достигнута</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
