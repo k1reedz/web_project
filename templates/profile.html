@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Профиль</title>
+
+  <!-- CSS -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection">
+  <link href="static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection">
+  <style>
+    /* Пользовательский стиль для радиокнопок */
+    .with-gap:checked + label:after {
+      border-color: #FFFF00; /* Жёлтый цвет */
+    }
+
+    /* Стиль для текста в полях ввода */
+    input[type="number"],
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="date"],
+    input[type="datetime"],
+    input[type="datetime-local"],
+    input[type="month"],
+    input[type="week"],
+    input[type="color"],
+    textarea.materialize-textarea {
+      color: #ffffff; /* Белый цвет */
+    }
+  </style>
+</head>
+<body style="background: rgb(33,33,33)">
+<nav>
+  <div class="nav-wrapper" style="background: rgb(33,33,33)">
+    <a href="/" class="brand-logo" style="padding-left: 30px; font-size: 50px; color: #ffb700">Яндекс.Фитнес</a>
+    <ul class="right right hide-on-med-and-down">
+      <li><a class="waves-effect waves-light btn" href="/schedule" style="background: #b71b1b">Расписание <i class="material-icons right">event_note</i></a></li>
+      <li><a class="waves-effect waves-light btn" href="/health" style="background: #b71b1b">Здоровье <i class="material-icons right">healing</i></a></li>
+      <li><a class="waves-effect waves-light btn" href="/food" style="background: #b71b1b">Питание <i class="material-icons right">local_dining</i></a></li>
+      <li><a class="waves-effect waves-light btn" href="/fitness" style="background: #b71b1b">Фитнес <i class="material-icons right">fitness_center</i></a></li>
+      <li><a class="waves-effect waves-light btn" href="/goals" style="background: #b71b1b">Цели <i class="material-icons right">stars</i></a></li>
+      <li><a class="waves-effect waves-light btn" href="/advice" style="background: #b71b1b">Советы <i class="material-icons right">wb_incandescent</i></a></li>
+      <li><a class="waves-effect waves-light btn" href="/profile" style="background: #b71b1b">Профиль <i class="material-icons right">person</i></a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+  <h3 style="color: white">Профиль пользователя</h3>
+
+<!-- Форма для отображения текущей информации о профиле -->
+<div class="row">
+    <div class="col s12 m6">
+        <div class="card" style="background-color: rgba(0, 0, 0, 0.1)">
+            <div class="card-content">
+                <span class="card-title" style="color: white">Текущая информация о профиле</span>
+                <p style="color: white"><strong>Имя:</strong> {{ user.name }}</p>
+                <p style="color: white"><strong>Email:</strong> {{ user.email }}</p>
+                <p style="color: white"><strong>Возраст:</strong> {{ user.stats["age"] }}</p>
+                <p style="color: white"><strong>Пол:</strong> {{ user.stats["gender"] }}</p>
+                <p style="color: white"><strong>Рост:</strong> {{ user.stats["height"] }}</p>
+                <p style="color: white"><strong>О себе:</strong> {{ user.stats["about"] }}</p>
+                <img src="{{ url_for('static', filename='uploads/' + user.stats['profile_image']) }}" alt="Profile Image" style="max-width: 80%; float: right; margin-top: -186px">
+            </div>
+        </div>
+    </div>
+</div>
+
+  <!-- Форма для обновления профиля -->
+  <div class="row">
+    <form class="col s12" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="user_id" value="{{ user.id }}">
+      <div class="row">
+        <div class="input-field col s6">
+          <input id="username" type="text" class="validate" name="username" value="{{ user.name }}">
+          <label for="username">Имя</label>
+        </div>
+        <div class="input-field col s6">
+          <input id="email" type="email" class="validate" name="email" value="{{ user.email }}">
+          <label for="email">Электронная почта</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input id="age" type="number" class="validate" name="age" value="{{ user.stats['age'] }}">
+          <label for="age">Возраст</label>
+        </div>
+        <div class="input-field col s6">
+          <input id="gender" type="text" class="validate" name="gender" value="{{ user.stats['gender'] }}">
+          <label for="gender">Пол</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input id="height" type="text" class="validate" name="height" value="{{ user.stats['height'] }}">
+          <label for="height">Рост</label>
+        </div>
+        <div class="input-field col s12">
+          <textarea id="about_me" class="materialize-textarea" name="about_me">{{ user.stats['about'] }}</textarea>
+          <label for="about_me">О себе</label>
+        </div>
+      </div>
+      <div class="file-field input-field">
+        <div class="btn" style="background: #ffb700; color: black">
+          <span>Загрузить изображение</span>
+          <input type="file" name="profile_image">
+        </div>
+        <div class="file-path-wrapper">
+          <input class="file-path validate" type="text">
+        </div>
+      </div>
+      <button class="btn waves-effect waves-light" type="submit" name="action" style="background: #ffb700; color: black">Обновить профиль
+        <i class="material-icons right">send</i>
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="static/js/init.js"></script>
+</body>
+</html>
