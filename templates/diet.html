@@ -1,33 +1,69 @@
 {% extends "base2.html" %}
 
 {% block content %}
+<style type="text/css">
+    /* Стиль для текста в блоке содержимого */
+    h1, h2, p, a, div {
+        color: white; /* Устанавливаем цвет текста на белый */
+    }
+
+    /* Стили для карточек */
+    .card-container {
+        display: flex; /* Располагаем карточки в строку */
+        flex-wrap: wrap; /* Разрешаем перенос строк */
+        justify-content: space-between; /* Выравниваем карточки по ширине контейнера */
+    }
+
+    .card {
+        width: calc(33.33% - 20px); /* Ширина карточки (33.33% от ширины контейнера) */
+        margin-bottom: 20px; /* Внешний отступ снизу */
+        padding: 20px; /* Внутренний отступ */
+        background-color: #333; /* Цвет фона карточки */
+        border-radius: 10px; /* Радиус скругления углов */
+    }
+
+    .card h2 {
+        margin-top: 0; /* Убираем верхний отступ у заголовка */
+    }
+
+    .card p {
+        margin-bottom: 10px; /* Внешний отступ снизу у параграфа */
+    }
+
+    .card a {
+        color: white; /* Цвет текста ссылок внутри карточки */
+        text-decoration: none; /* Убираем подчеркивание у ссылок */
+    }
+
+    .card a:hover {
+        background-color: #ffb700; /* Желтый фон при наведении */
+        text-decoration: underline; /* Подчеркиваем ссылки при наведении */
+    }
+</style>
 <body>
-    <a href="/diet/adding_a_product" class="btn btn-outline-success">
-                Добавить продукт в рацион
+    <a href="/diet/adding_a_product" class="waves-effect waves-light btn-large" style="background: #ffb700">
+        <i class="material-icons left">add</i>Добавить продукт в рацион
     </a>
-    <font>Итог: {{sum_kcal}} ккал. {{sum_proteins}}г. белков {{sum_fats}}г. жиров {{sum_carbohydrates}}г. углеводов</font>
+    <div style="color: white; font-size: 20px">Итог: {{sum_kcal}} ккал. {{sum_proteins}}г. белков {{sum_fats}}г. жиров {{sum_carbohydrates}}г. углеводов</div>
     <form method="post">
         <input type="date" id="start" name="input_date" style="background-color: rgb(44,44,44); color: white"
                value={{current_date}} min="2024-01-01" max={{today}} />
         <input type="submit" value="Подтвердить" style="background-color: rgb(44,44,44); color: white">
     </form>
     <h1>Дневной рацион</h1>
-    {% for item in products%}
-    <div class="col-md6 border rounded">
-        <h2>{{item.title}}</h2>
-            <font>
-                {{item.weight}}гр.
-                {{item.total_kcal}} ккал. {{item.total_proteins}}г. белков {{item.total_fats}}г. жиров {{item.total_carbohydrates}}г. углеводов
-            </font>
-        <div>
-            <a href="/diet_change/{{item.id}}" class="btn btn-outline-warning">
-                Изменить
-            </a>
-            <a href="/diet_delete/{{item.id}}" class="btn btn-outline-danger">
-                Удалить
-            </a>
-        </div>
+    <div class="card-container">
+        {% for item in products %}
+            <div class="card">
+                <h2>{{ item.title }}</h2>
+                <p>{{ item.weight }}гр. {{ item.total_kcal }} ккал. {{ item.total_proteins }}г. белков {{ item.total_fats }}г. жиров {{ item.total_carbohydrates }}г. углеводов</p>
+                <a href="/diet_change/{{item.id}}" class="waves-effect waves-light btn-small" style="background: #ffb700">
+                    <i class="material-icons left">edit</i>Изменить
+                </a>
+                <a href="/diet_delete/{{item.id}}" class="waves-effect waves-light btn-small" style="background: #F44336">
+                    <i class="material-icons left">delete</i>Удалить
+                </a>
+            </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </body>
 {% endblock %}
