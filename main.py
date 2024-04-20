@@ -1,60 +1,59 @@
 from flask import Flask, render_template, redirect, make_response, jsonify, request, url_for, flash
-from data import db_session
-from data.users import User
-from sqlalchemy import orm, desc
-from datetime import datetime
-from data.health import Health
-import requests
-from data import goals_api
-from data import tasks_api
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from forms.user_form import RegisterForm, LoginForm
-from forms.goal_form import GoalForm
-from forms.task_form import TaskForm
-import os
-import time
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
-import secrets
-from PIL import Image
-
+from data import db_session  # Импорт модуля для работы с базой данных
+from data.users import User  # Импорт модели пользователя
+from sqlalchemy import orm, desc  # Импорт функций для работы с базой данных
+from datetime import datetime  # Импорт модуля для работы с датами и временем
+from data.health import Health  # Импорт модели здоровья
+import requests  # Импорт модуля для отправки HTTP-запросов
+from data import goals_api  # Импорт API для работы с целями
+from data import tasks_api  # Импорт API для работы с задачами
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user  # Импорт модуля для аутентификации пользователей
+from forms.user_form import RegisterForm, LoginForm  # Импорт форм для регистрации и входа
+from forms.goal_form import GoalForm  # Импорт формы для целей
+from forms.task_form import TaskForm  # Импорт формы для задач
+import os  # Импорт модуля для работы с операционной системой
+import time  # Импорт модуля для работы со временем
+from flask_sqlalchemy import SQLAlchemy  # Импорт модуля для работы с базой данных SQLAlchemy
+from flask_migrate import Migrate  # Импорт модуля для миграции базы данных
+import numpy as np  # Импорт модуля для работы с массивами
+import matplotlib  # Импорт модуля для построения графиков
+import matplotlib.pyplot as plt  # Импорт функций для построения графиков
+import secrets  # Импорт модуля для генерации безопасных случайных чисел
+from PIL import Image  # Импорт модуля для работы с изображениями
 
 matplotlib.use('Agg')  # Используем Agg для работы без GUI
 
-app = Flask(__name__)
-address = "http://127.0.0.1:5000"
-app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
-app.register_blueprint(goals_api.blueprint)
-app.register_blueprint(tasks_api.blueprint)
-login_manager = LoginManager()
-login_manager.init_app(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-# Конфигурируем базу данных SQLite для приложения здоровья
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+app = Flask(__name__)  # Создание экземпляра приложения Flask
+address = "http://127.0.0.1:5000"  # Адрес API
+app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'  # Установка секретного ключа для безопасности приложения
+app.register_blueprint(goals_api.blueprint)  # Регистрация Blueprint для работы с целями
+app.register_blueprint(tasks_api.blueprint)  # Регистрация Blueprint для работы с задачами
+login_manager = LoginManager()  # Создание объекта для управления аутентификацией пользователей
+login_manager.init_app(app)  # Инициализация аутентификации в приложении
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'  # Установка URI для базы данных
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Отключение отслеживания изменений базы данных
+db = SQLAlchemy(app)  # Создание объекта для работы с базой данных SQLAlchemy
+migrate = Migrate(app, db)  # Создание объекта для миграции базы данных
 app.config['UPLOAD_FOLDER'] = 'static/uploads'  # Папка для загрузки изображений профиля
-
 
 # Главная страница
 @app.route("/")
 def index():
     return render_template("index.html")
 
-
+# Регистрация нового пользователя
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
         return redirect("/profile")
     form = RegisterForm()
     if form.validate_on_submit():
+        # Проверка совпадения паролей
         if form.password.data != form.password_again.data:
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Пароли не совпадают")
+        # Создание нового пользователя и сохранение его в базе данных
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
@@ -73,7 +72,7 @@ def register():
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
 
-
+# Вход пользователя
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -82,6 +81,7 @@ def login():
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
+        # Проверка соответствия email и пароля
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect("/profile")
@@ -90,30 +90,30 @@ def login():
                                form=form)
     return render_template('login.html', title='Авторизация', form=form)
 
-
+# Выход пользователя
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect("/")
 
-
+# Загрузка пользователя при аутентификации
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).filter(User.id == user_id).first()
 
-
+# Обработчик ошибки 404
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
-
+# Обработчик ошибки 400
 @app.errorhandler(400)
 def bad_request(_):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
 
-
+# Отображение списка целей пользователя
 @app.route("/goals")
 def render_goals():
     if not current_user.is_authenticated:
@@ -125,7 +125,7 @@ def render_goals():
         goals = []
     return render_template("goals.html", goals=goals)
 
-
+# Добавление новой цели пользователя
 @app.route("/add_goal", methods=["POST", "GET"])
 def add_goal():
     if not current_user.is_authenticated:
@@ -144,13 +144,13 @@ def add_goal():
         return redirect('/goals')
     return render_template("goal_form.html", form=form)
 
-
+# Удаление цели пользователя
 @app.route("/delete_goal/<int:goal_id>", methods=["DELETE", "POST", "GET"])
 def delete_goal(goal_id):
     requests.delete(f"{address}/api/goal/{str(goal_id)}")
     return redirect('/goals')
 
-
+# Отображение выполненных целей пользователя
 @app.route("/done_goals", methods=["GET"])
 def render_done_goals():
     if not current_user.is_authenticated:
@@ -169,14 +169,14 @@ def render_done_goals():
         goals = []
     return render_template("done_goals.html", goals=goals)
 
-
+# Пометка цели как выполненной
 @app.route("/finish_goal/<int:goal_id>", methods=["PUT", "GET"])
 def done_goal(goal_id):
     requests.put(f"{address}/api/goal/{str(goal_id)}", json=jsonify({"accomplished": True, "finish_date":
                                                                           datetime.now().date().strftime("%d.%m.%Y")}).json)
     return redirect("/done_goals")
 
-
+# Отображение расписания пользователя
 @app.route("/schedule", methods=["GET", "POST"])
 def render_schedule():
     if not current_user.is_authenticated:
@@ -210,17 +210,15 @@ def render_schedule():
         message = ""
     return render_template("schedule.html", form=form, tasks=tasks, message=message)
 
-
+# Удаление задачи пользователя
 @app.route("/delete_task/<int:task_id>", methods=["DELETE", "GET"])
 def delete_task(task_id):
     requests.delete(f"{address}/api/task/{str(task_id)}")
     return redirect('/schedule')
 
-
-# Создаем таблицы в базах данных, если они не существуют
+# Создание таблиц в базах данных, если они не существуют
 with app.app_context():
     db.create_all()
-
 
 # Функция для получения данных из базы данных здоровья
 def get_data_from_db():
@@ -234,7 +232,6 @@ def get_data_from_db():
     steps_data = np.array([d.steps for d in data if d.steps is not None])
     db_sess.close()
     return weight_data, water_data, activity_data, heart_rate_data, mental_data, steps_data
-
 
 # Функция для сохранения изображения профиля
 def save_picture(form_picture):
@@ -255,7 +252,6 @@ def save_picture(form_picture):
     i = i.resize(output_size, Image.LANCZOS)
     i.save(picture_path)
     return picture_fn
-
 
 # Функция для генерации графиков
 def generate_plots(weight_data, water_data, activity_data, heart_rate_data, mental_data, steps_data):
@@ -281,19 +277,16 @@ def generate_plots(weight_data, water_data, activity_data, heart_rate_data, ment
     plt.close()
     return plot_file
 
-
+# Отображение профиля пользователя
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     if not current_user.is_authenticated:
         return redirect("/")
-
-    # Get the SQLAlchemy session
     db_sess = db_session.create_session()
-
     user = db_sess.query(User).filter(User.id == current_user.id).first()
     if request.method == 'POST':
         try:
-            # Update the user profile
+            # Обновление профиля пользователя
             user.name = request.form['username']
             user.email = request.form['email']
             user.stats["age"] = request.form['age']
@@ -301,34 +294,25 @@ def profile():
             user.stats["height"] = request.form['height']
             user.stats["about"] = request.form['about_me']
             if 'profile_image' in request.files:
-                # Update the profile image if it's uploaded
+                # Обновление изображения профиля, если оно загружено
                 file = request.files['profile_image']
                 if file.filename != '':
-                    # Save the new profile image
                     user.stats["profile_image"] = save_picture(file)
             orm.attributes.flag_modified(user, 'stats')
-
-            # Commit the changes to the database
             db_sess.commit()
-
-            # Update the current user with the updated data
             login_user(user)
-
             return redirect(url_for('profile'))
         except Exception as e:
-            # Handle exceptions, such as validation errors or database errors
+            # Обработка исключений, таких как ошибки валидации или ошибки базы данных
             db_sess.rollback()
             flash("An error occurred while updating the profile.", "error")
-    # Close the SQLAlchemy session
     db_sess.close()
-
     return render_template('profile.html', user=user)
 
-
+# Обновление профиля пользователя
 @app.route('/update_profile', methods=['POST', 'GET'])
 def update_profile():
     if request.method == 'POST':
-        # Обновляем профиль пользователя
         username = request.form['username']
         email = request.form['email']
         age = request.form['age']
@@ -336,48 +320,31 @@ def update_profile():
         height = request.form.get('height', '')
         about_me = request.form.get('about_me', '')
         profile_image = request.files['profile_image'] if 'profile_image' in request.files else None
-
-        # Находим пользователя по ID
         user = User.query.get(current_user.id)
         if user:
-            # Удаляем предыдущее изображение, если оно существует и не является изображением по умолчанию
             if user.profile_image != 'default.jpg':
                 os.remove(os.path.join(app.root_path, 'static/uploads', user.profile_image))
-
-            # Обновляем данные пользователя
             user.name = username
             user.email = email
             user.stats["age"] = age
             user.stats["gender"] = gender
             user.stats["height"] = height
             user.stats["about"] = about_me
-
-            # Проверяем, загружено ли новое изображение профиля
             if profile_image:
-                # Сохраняем новое изображение профиля
                 filename = save_picture(profile_image)
                 user.stats["profile_image"] = filename
-
-            # Сохраняем обновленные данные пользователя в базе данных
             db.session.commit()
-
-            # Перенаправляем пользователя на страницу профиля
             return redirect(url_for('profile'))
-
-    # Если метод запроса GET, просто отображаем форму обновления профиля
     return render_template('update_profile.html')
 
-
-# Определяем маршрут для отображения главной страницы
+# Отображение страницы здоровья
 @app.route('/health')
 def health():
     return render_template('health.html')
 
-
-# Определяем маршрут для обработки отправленной формы
+# Обработка данных, отправленных формой
 @app.route('/submit', methods=['POST'])
 def submit():
-    # Получение данных из формы
     db_sess = db_session.create_session()
     weight = request.form.get('weight', type=float)
     water = request.form.get('water', type=float)
@@ -385,21 +352,16 @@ def submit():
     heart_rate = request.form.get('heart_rate', type=int)
     mental = request.form.get('mental', type=int)
     steps = request.form.get('steps', type=int)
-
-    # Создание нового объекта данных и добавление его в базу данных
     new_data = Health(weight=weight, water=water, activity=activity,
                           heart_rate=heart_rate, mental=mental, steps=steps, user_id=current_user.id)
     db_sess.add(new_data)
     db_sess.commit()
     db_sess.close()
-
-    # Повторное получение данных и генерация графиков
     weight_data, water_data, activity_data, heart_rate_data, mental_data, steps_data = get_data_from_db()
     plot_file = generate_plots(weight_data, water_data, activity_data, heart_rate_data, mental_data, steps_data)
-
     return render_template('health.html', image_file=plot_file)
 
-
+# Получение последних данных о здоровье пользователя
 def get_latest_health_data(user_id):
     db_sess = db_session.create_session()
     latest_health_data = db_sess.query(Health).filter(Health.user_id == user_id).order_by(desc(Health.id)).all()
@@ -407,34 +369,36 @@ def get_latest_health_data(user_id):
     db_sess.close()
     return latest_health_data
 
-
+# Отображение советов по здоровью
 @app.route("/advice")
 def advice():
     latest_health_data = get_latest_health_data(current_user.id)
     if latest_health_data:
-        latest_health_entry = latest_health_data[0]  # Получаем только последнюю запись о здоровье
-        advices = generate_advice(latest_health_entry)  # Передаем только эту запись в функцию
+        latest_health_entry = latest_health_data[0]
+        advices = generate_advice(latest_health_entry)
     else:
         advices = []
     return render_template('advices.html', advices=advices)
 
+# Генерация советов по здоровью на основе последних данных о здоровье
+def generate_advice(latest_health_entry):
+    advices = []
+    if latest_health_entry.weight:
+        weight = latest_health_entry.weight
+        if weight < 50:
+            advices.append("Ваш вес ниже нормы. Рекомендуется обратиться к врачу.")
+        elif weight > 100:
+            advices.append("Ваш вес выше нормы. Рекомендуется обратить внимание на режим питания.")
+    if latest_health_entry.heart_rate:
+        heart_rate = latest_health_entry.heart_rate
+        if heart_rate > 100:
+            advices.append("Ваш пульс выше нормы. Рекомендуется уменьшить физическую активность.")
+    if latest_health_entry.mental:
+        mental = latest_health_entry.mental
+        if mental > 7:
+            advices.append("Уровень стресса выше нормы. Рекомендуется принять меры по его снижению.")
+    return advices
 
-def generate_advice(health_entry):
-    advice = []
-    if health_entry.steps < 500:
-        advice.append("Увеличьте количество шагов в течение дня.")
-    if health_entry.weight < 60 or health_entry.weight > 130:
-        advice.append("Обратите внимание на свой вес и питание.")
-    if health_entry.mental >= 8:
-        advice.append("Постарайтесь уменьшить уровень стресса, возможно, стоит обратиться к специалисту.")
-    if health_entry.water < 2:
-        advice.append("Не забывайте употреблять достаточное количество воды в течение дня.")
-    return advice
-
-def main():
-    db_session.global_init("instance/users.db")
-    app.run()
-
-
+# Запуск приложения
 if __name__ == '__main__':
-    main()
+    app.run(port=8080, host='127.0.0.1')
