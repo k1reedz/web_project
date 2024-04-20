@@ -1,11 +1,14 @@
-from flask import Flask, render_template, redirect, make_response, jsonify, request, url_for, flash
+from flask import Flask, render_template, redirect, make_response, jsonify, request, url_for, flash, abort
 from data import db_session
 from data.users import User
+from data.activity import Activity
+from data.ration import Ration
 from sqlalchemy import orm, desc
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from data.health import Health
 import requests
 from data import goals_api
+import sqlite3
 from data import tasks_api
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms.user_form import RegisterForm, LoginForm
@@ -37,6 +40,20 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'  # Папка для загрузки изображений профиля
+
+
+weekdays = ('Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье')
+week = []
+current_day = date.today()
+timedelta_value = 0
+current_user_id = 1
+con = sqlite3.connect('instance/products.db')
+cur = con.cursor()
+all_products = cur.execute('''SELECT name FROM products''').fetchall()
+products_list = []
+for i in all_products:
+    products_list.append(i[0])
+con.close()
 
 
 # Главная страница
@@ -430,6 +447,55 @@ def generate_advice(health_entry):
     if health_entry.water < 2:
         advice.append("Не забывайте употреблять достаточное количество воды в течение дня.")
     return advice
+
+
+@app.route("/fitness", methods=['POST', 'GET'])
+def activities():
+    global week
+    global current_day
+    current_day = date.today() + timedelta(days=timedelta_value)
+    today_weekday = current_day.weekday()  # промежуток дней между понедельником и текущим днем
+    week = []   # даты всех дней на текущей неделе
+    for i in range(7):
+        week.append(current_day + timedelta(days=i - today_weekday))
+    session = db_session.create_session()
+    week_activities = []
+    for j in range(7):
+        week_activities.append(session.query(Activity).filter(Activity.date.like(f'{week[j]}%'),
+                                                              Activity.user_id == current_user_id).order_by(
+                                                              Activity.start, Activity.end).all())
+    session.close()
+    return render_template('activities.html', weekdays=weekdays, week=week, week_activities=week_activities)
+
+@app.route("/adding_a_training/<date>", methods=['POST', 'GET'])
+def adding_a_training(date):
+    global week
+    if request.method == "POST":
+        title = request.form['title']
+        type = request.form['type']
+        start = request.form['start']
+        end = request.form['end']
+        if bool(title) and datetime.strptime(start, "%H:%M") < datetime.strptime(end, "%H:%M"):
+            try:
+                date = datetime.strptime(date, "%Y-%m-%d")
+                session = db_session.create_session()
+                training = Activity(title=title,
+                                    type=type,
+                                    start=start,
+                                    end=end,
+                                    date=date,
+                                    user_id=current_user_id)
+                session.add(training)
+                session.commit()
+                return redirect("/activities")
+            except:
+                abort(404)
+        else:
+            return render_template("adding_a_training.html", inf='Ошибка', page_title='Добавить ',
+                                   title_text=title, start_text=start, end_text=end,
+                                   type_text=type)
+    return render_template('adding_a_training.html', weekdays=weekdays, page_title='Добавить ')
+
 
 def main():
     db_session.global_init("instance/users.db")

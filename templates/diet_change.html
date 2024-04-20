@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <link rel="stylesheet" type="text/css" href="static/css/style.css"/>
+</head>
+<body>
+    <h1>{{title_text}}</h1>
+    <form method="post">
+        <input list="text" name="title">
+        <datalist id="text">
+            {% for item in products_list%}
+            <option value='{{item}}'></option>
+            {% endfor %}
+        </datalist>
+        <input type="number" placeholder="Масса" name="weight" value={{weight_text}} min='0' oninput="this.value = Math.abs(this.value)">
+        <input type="submit" value="Сохранить">
+    </form>
+    <h2>{{inf}}</h2>
+</body>
+{% endblock %}

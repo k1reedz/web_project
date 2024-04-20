@@ -60,6 +60,8 @@ def get_weekday_tasks(user_id):
               "Пятница": [], "Суббота": [], "Воскресенье": []}
     for task in tasks.json["tasks"]:
         result[task["weekday"]].append(task)
+    for i in result:
+        result[i] = sorted(result[i], key=lambda x: int(x["start"][3:]))
     return result
 
 

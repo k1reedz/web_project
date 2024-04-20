@@ -82,7 +82,7 @@
         {% endfor %}
         </span>
         <span>{{ form.submit(type="submit", class="btn btn-primary", style="background: #ffb700") }}</span>
-        {{message}}
+        <p>{{message}}</p>
     </form>
     <br>
     <button type="button" class="red btn btn-primary" >Для удаления события нажмите на его название</button>>
@@ -103,7 +103,7 @@
                 <th>{{counter}}:00-{{counter + 1}}:00</th>
                 <th>
                     {% for task in tasks["Понедельник"] %}
-                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int <= (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
+                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int < (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
                             <form action="/delete_task/{{task['id']}}">
                                 <button type="submit" class="btn btn-primary">{{ task["task_name"] }}</button>
                             </form>
@@ -113,7 +113,7 @@
                 </th>
                 <th>
                     {% for task in tasks["Вторник"] %}
-                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int <= (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
+                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int < (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
                             <form action="/delete_task/{{task['id']}}">
                                 <button type="submit" class="btn btn-primary">{{ task["task_name"] }}</button>
                             </form>
@@ -123,7 +123,7 @@
                 </th>
                 <th>
                     {% for task in tasks["Среда"] %}
-                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int <= (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
+                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int < (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
                             <form action="/delete_task/{{task['id']}}">
                                 <button type="submit" class="btn btn-primary">{{ task["task_name"] }}</button>
                             </form>
@@ -133,7 +133,7 @@
                 </th>
                 <th>
                     {% for task in tasks["Четверг"] %}
-                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int <= (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
+                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int < (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
                             <form action="/delete_task/{{task['id']}}">
                                 <button type="submit" class="btn btn-primary">{{ task["task_name"] }}</button>
                             </form>
@@ -143,7 +143,7 @@
                 </th>
                 <th>
                     {% for task in tasks["Пятница"] %}
-                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int <= (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
+                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int < (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
                            <form action="/delete_task/{{task['id']}}">
                                 <button type="submit" class="btn btn-primary">{{ task["task_name"] }}</button>
                            </form>
@@ -153,7 +153,7 @@
                 </th>
                 <th>
                     {% for task in tasks["Суббота"] %}
-                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int <= (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
+                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int < (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
                             <form action="/delete_task/{{task['id']}}">
                                 <button type="submit" class="btn btn-primary">{{ task["task_name"] }}</button>
                             </form>
@@ -163,7 +163,7 @@
                 </th>
                 <th>
                     {% for task in tasks["Воскресенье"] %}
-                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int <= (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
+                        {% if task["end"][:2] | int >= counter and task["start"][:2] | int < (counter + 1) and (task["end"][:2] | int != counter or task["end"][3:] != '00') %}
                             <form action="/delete_task/{{task['id']}}">
                                 <button type="submit" class="btn btn-primary">{{ task["task_name"] }}</button>
                             </form>

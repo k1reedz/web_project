@@ -6,38 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="588fa73e-a5a2-4265-9ca3-892c40a47300" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/instance/health_data.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/data/__all_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/__all_models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/data/db_session.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/db_session.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/data/goals.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/goals.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/data/goals_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/goals_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/data/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/tasks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/data/tasks_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/tasks_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/data/users.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/users.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/db/users.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/forms/goal_form.py" beforeDir="false" afterPath="$PROJECT_DIR$/forms/goal_form.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/forms/task_form.py" beforeDir="false" afterPath="$PROJECT_DIR$/forms/task_form.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/forms/user_form.py" beforeDir="false" afterPath="$PROJECT_DIR$/forms/user_form.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/static/cats-gym.gif" beforeDir="false" afterPath="$PROJECT_DIR$/static/cats-gym.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/static/css/materialize.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/static/css/materialize.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/static/css/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/static/dar3kkaa-thomas-shelby.gif" beforeDir="false" afterPath="$PROJECT_DIR$/static/dar3kkaa-thomas-shelby.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/static/js/init.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/static/js/materialize.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/static/js/materialize.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/static/rock-what.gif" beforeDir="false" afterPath="$PROJECT_DIR$/static/rock-what.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/templates/base.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/templates/done_goals.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/done_goals.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/templates/goal_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/goal_form.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/templates/goals.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/goals.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/templates/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_page/templates/schedule.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/schedule.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/__all_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/__all_models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tasks_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/tasks_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/instance/users.db" beforeDir="false" afterPath="$PROJECT_DIR$/instance/users.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/plots_1713548345.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base2.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/schedule.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/schedule.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +24,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="HTML File" />
         <option value="Python Script" />
       </list>
     </option>
@@ -76,10 +54,11 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/User/Desktop/project/web_project/templates",
+    "last_opened_file_path": "C:/Users/User/Desktop/project/web_project/instance",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -90,6 +69,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\User\Desktop\project\web_project\instance" />
       <recent name="C:\Users\User\Desktop\project\web_project\templates" />
       <recent name="C:\Users\User\Desktop\project\web_project\main_page\templates" />
     </key>
@@ -162,6 +142,7 @@
       <option name="presentableId" value="Default" />
       <updated>1711381407756</updated>
       <workItem from="1713536673483" duration="12967000" />
+      <workItem from="1713635876975" duration="4191000" />
     </task>
     <servers />
   </component>
@@ -180,6 +161,6 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/users_db$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1713550017312" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/users_db$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1713639975932" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

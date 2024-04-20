@@ -27,3 +27,31 @@ main {
     max-width: 80%;
     height: auto;
 }
+b {
+     font-size: 20px;
+     color: white
+}
+
+p {
+  color: white
+}
+
+.icon-block {
+  padding: 0 15px;
+}
+
+.icon-block .material-icons {
+	font-size: inherit;
+}
+
+h1 {
+   color: white
+}
+
+h2 {
+   color: white
+}
+
+font {
+     color: white
+}
