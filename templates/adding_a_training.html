@@ -1,7 +1,38 @@
 {% extends "base2.html" %}
 
 {% block content %}
- <body>
+<style>
+    body {
+        color: white; /* Устанавливает белый цвет текста */
+        background-color: #333; /* Темный фон для контраста */
+    }
+
+    input[type="text"], input[type="time"], input[type="submit"] {
+        background-color: #444; /* Темный фон для полей */
+        color: white; /* Белый цвет текста */
+        border: none; /* Без границ */
+        padding: 8px; /* Отступы внутри */
+        border-radius: 4px; /* Скругленные углы */
+        width: 100%; /* Ширина элемента */
+        box-sizing: border-box; /* Размеры включают padding и border */
+        margin-bottom: 10px; /* Отступ снизу для каждого элемента */
+    }
+
+    input[type="submit"] {
+        background-color: #F44336; /* Красный фон кнопки */
+        cursor: pointer; /* Курсор в виде указателя */
+    }
+
+    input[type="submit"]:hover {
+        background-color: #ffb700; /* Желтый фон при наведении */
+    }
+
+    form div {
+        margin-bottom: 10px; /* Отступы между блоками в форме */
+    }
+</style>
+
+<body>
     <h1>{{page_title}} тренировку</h1>
     <form method="post">
         <div>
@@ -14,5 +45,5 @@
         <input type="submit" value={{page_title}}>
     </form>
     <h2>{{inf}}</h2>
- </body>
+</body>
 {% endblock %}
