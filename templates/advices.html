@@ -3,9 +3,9 @@
 {% block content %}
 <div class="container" style="color: white; font-size: 2em; text-align: center">
     <h1>Советы для вашего здоровья</h1>
-    {% if advice %}
+    {% if advices %}
         <ul>
-        {% for item in advice %}
+        {% for item in advices %}
             <li>{{ item }}</li>
         {% endfor %}
         </ul>
