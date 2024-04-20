@@ -1,193 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Яндекс фитнес</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>Яндекс фитнес</title>
 
-  <!-- CSS  -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
-<body style="background: rgb(33,33,33)">
-  <nav class="grey darken-4" role="navigation">
+<body style="background-image: url('/static/images/cats-gym.gif'); background-repeat: no-repeat; background-size: cover;">
+<nav class="grey darken-4" role="navigation">
     <div class="nav-wrapper container">
-      {% if current_user.is_authenticated %}
+      <a id="logo-container" href="/" class="brand-logo" style="color: #ffb700">Яндекс.Фитнес</a>
+        {% if current_user.is_authenticated %}
         <ul class="right hide-on-med-and-down">
-          <li><a href="/profile" style="background: #ffb700">{{current_user.name}}</a></li>
+            <li><a href="/profile" class="yellow darken-2 white-text">{{current_user.name}}</a></li>
         </ul>
-      {% else %}
-        <a id="logo-container" href="/" class="brand-logo" style="color: #ffb700">Яндекс.Фитнес</a>
+        {% else %}
+
         <ul class="right hide-on-med-and-down">
-          <li><a href="/login" style="background: #ffb700">Войти</a></li>
+            <li><a href="/login" class="red lighten-1 white-text">Войти</a></li>
+            <li><a href="/register" class="yellow darken-3 white-text">Регистрация</a></li>
         </ul>
-        <ul class="right hide-on-med-and-down">
-          <li><a href="/register" style="background: #b71b1b">Регистрация</a></li>
-        </ul>
-      {% endif %}
+        {% endif %}
     </div>
-  </nav>
-
-  <div id="index-banner" class="parallax-container">
-    <div class="section no-pad-bot">
-      <div class="container">
-        <br><br>
-        <h1 class="header center">Здоровой образ жизни - просто!</h1>
-        <div class="row center">
-          <h3 class="header col s12 light white-text" style="background: rgba(0, 0, 0, 0.3)">С нашим сервисом это будет ещё проще</h3>
-        </div>
-        <div class="row center">
-          <h1 href="/register" id="download-button" class="btn-large waves-effect red">НАЧАТЬ</h1>
-        </div>
-        <br><br>
-
-      </div>
-    </div>
- <div class="parallax"><img src="{{ url_for('static', filename='main_image/cats-gym.gif') }}" style="bottom: 250px" alt="Unsplashed background img 1"></div>
-  </div>
-
-
-  <div class="darken-4 grey container">
-    <div class="section">
-
-      <!--   Icon Section   -->
-      <div class="row">
-        <div class="col s12 m4" style="background: rgba(229, 28, 35, 0.4)">
-          <div class="icon-block">
-            <h2 class="center red-text"><i class="material-icons">golf_course</i></h2>
-            <h5 class="white-text center">Ставьте цели</h5>
-
-            <p class="white-text light">С помощью нашего приложения вы можете ставить такие цели, как: похудение, набор массы, оставаться с нынешними показателями</p>
-          </div>
-        </div>
-
-        <div class="col s12 m4">
-          <div class="icon-block" style="background: rgba(255, 183, 0, 0.3)">
-            <h2 class="center yellow-text"><i class="material-icons">local_dining</i></h2>
-            <h5 class="white-text center">Следите за питание</h5>
-
-            <p class="white-text light">Благодаря алгоритмам, сделанными квалифицированными специалистами, вы сможете следить за количеством калорий в вашем дневном рационе</p>
-          </div>
-        </div>
-
-        <div class="col s12 m4" style="background: rgba(229, 28, 35, 0.4)">
-          <div class="icon-block">
-            <h2 class="center red-text"><i class="material-icons">fitness_center</i></h2>
-            <h5 class="white-text center">Занимайтесь спортом</h5>
-
-            <p class="white-text light">Наше приложение поможет начать или же облегчить изменение вашего тела в лучшую форму. Помните - вы сигма!</p>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-
-  <div class="parallax-container valign-wrapper">
-    <div class="section no-pad-bot">
-      <div class="container">
-        <div class="row center">
-          <h5 class="header col s12 light white-text" style="background: rgba(0, 0, 0, 0.3)">Но и это ещё не всё!</h5>
-        </div>
-      </div>
-    </div>
-    <div class="parallax"><img src="static/dar3kkaa-thomas-shelby.gif" style="height: 100px" alt="Unsplashed background img 2"></div>
-  </div>
-
-  <div class="container">
-    <div class="section">
-
-      <div class="row">
-        <div class="col s12 m4" style="background: rgba(255,183,0,0.4)">
-          <div class="icon-block">
-            <h2 class="center yellow-text"><i class="material-icons">fingerprint</i></h2>
-            <h5 class="white-text center">Безопасность</h5>
-
-            <p class="white-text light">Мы используем особое хеширование паролей, благодаря чему никто не сможет получить доступ к вашему аккаунту</p>
-          </div>
-        </div>
-
-        <div class="col s12 m4">
-          <div class="icon-block" style="background: rgba(229, 28, 35, 0.4)">
-            <h2 class="center red-text"><i class="material-icons">group</i></h2>
-            <h5 class="white-text center">Назначайте совместые тренировки</h5>
-
-            <p class="white-text light">Вы можете добавлять свои тренировки на неделю, указывать тип активности (бег, плавание, йога и т. д.), а также день недели, время начала и конца</p>
-          </div>
-        </div>
-
-        <div class="col s12 m4" style="background: rgba(255,183,0,0.4)">
-          <div class="icon-block">
-            <h2 class="center yellow-text"><i class="material-icons">insert_chart</i></h2>
-            <h5 class="white-text center">Ведите статистику</h5>
-
-            <p class="white-text light">Вы можете отмечать основные показатели здоровья, такие как вес, кровяное давление, пульс, уровень сахара в крови и т. д</p>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-
-  <div class="parallax-container valign-wrapper">
-    <div class="section no-pad-bot">
-      <div class="container">
-        <div class="row center">
-          <h5 class="header col s12 light">А сейчас немного контактной информации</h5>
-        </div>
-      </div>
-    </div>
-    <div class="parallax"><img src="static/rock-what.gif" style="resize: horizontal" alt="Unsplashed background img 3"></div>
-  </div>
-
-  <footer class="page-footer yellow darken-3">
+</nav>
+<div class="section no-pad-bot" id="index-banner">
     <div class="container">
-      <div class="row">
-        <div class="col l5 s12">
-          <h5 class="white-text">Наши контакты</h5>
-          <p class="grey-text text-lighten-4">Достучаться до разработчиков данного произведения искусства можно с помощью:</p>
+        <br><br>
+        <h1 class="header center orange-text">Начни меняться сегодня! С нами проще!</h1>
+        <div class="row center">
+            <h5 class="header col s12 light" style="color: whitesmoke">"Не разбив яиц, омлет не приготовишь." - Тайлер Дерден</h5>
+        </div>
+        <br><br>
+    </div>
+</div>
 
+<div class="container">
+    <div class="section">
+        <!--   Icon Section   -->
+        <div class="row">
+            <div class="col s12 m4">
+                <div class="card" style="background: rgba(9,5,5,0.34)">
+                    <div class="card-content">
+                        <span class="card-title center light-blue-text"><i class="material-icons large" style="color: #ffb700">favorite</i></span>
+                        <h5 class="center" style="color: whitesmoke">Делайте заметки о здоровье</h5>
+                        <p class="light" style="color: white; font-size: 20px">Ведение заметок о здоровье - ключ к лучшему самочувствию и качественной жизни. Каждый момент, каждое изменение - это возможность улучшить своё благополучие. Записывайте свои питательные привычки, физическую активность, уровень стресса и сон, чтобы лучше понимать свои потребности и прогресс. Будьте в курсе своего здоровья, чтобы предотвращать проблемы до их появления и находить мотивацию для улучшений. Делайте заметки о своём здоровье сегодня, чтобы обеспечить себе более здоровое и счастливое будущее. Каждый шаг к заботе о себе важен - не упускайте ни одной детали!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4">
+                <div class="card" style="background: rgba(9,5,5,0.34)">
+                    <div class="card-content">
+                        <span class="card-title center light-blue-text"><i class="material-icons large" style="color: #ffb700">fingerprint</i></span>
+                        <h5 class="center" style="color: whitesmoke">Безопасность</h5>
+                        <p class="light" style="color: white; font-size: 20px">наш сайт, ваше безопасное пристанище в мире онлайн! Здесь ваше благополучие - наша первоочередная задача. Мы гордимся тем, что предоставляем вам не только качественный контент, но и абсолютно безопасную среду для его потребления.
 
+                            Наши системы защиты работают на всех уровнях, чтобы гарантировать вам непревзойденную безопасность при посещении нашего сайта. Мы тщательно следим за нашими серверами, используем самые современные методы шифрования данных и строго контролируем доступ к вашей личной информации.
+
+                            Присоединяйтесь к нашему сообществу и наслаждайтесь своим онлайн-пребыванием без каких-либо беспокойств. Ваша безопасность - наш приоритет!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4" >
+                <div class="card" style="background: rgba(9,5,5,0.34)">
+                    <div class="card-content">
+                        <span class="card-title center light-blue-text"><i class="material-icons large" style="color: #ffb700">fitness_center</i></span>
+                        <h5 class="center" style="color: whitesmoke">Следите за своей фигурой</h5>
+                        <p class="light" style="color: white; font-size: 20px">Хотите достичь своих фитнес-целей и сохранить здоровье? Начните с контроля над своим рационом и уровнем активности! Наш заголовок - приглашение к активному образу жизни и балансированию питания. Ведите записи о том, что вы едите, и какие тренировки проводите. Узнайте, сколько калорий вы потребляете и сжигаете, чтобы достигать идеального баланса. Следите за своими успехами, отслеживайте прогресс и мотивируйте себя к новым достижениям. Фитнес и питание - это не просто стиль жизни, это путь к лучшей версии себя! Поймите, контролируйте, достигайте!</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col l3 s12">
-          <h5 class="white-text">Егор</h5>
-          <ul>
-            <li><a class="light-blue-text" href="https://t.me/Egor_li">Телеграм</a></li>
-            <li><a class="blue-text" href="https://vk.com/id404236874?from=search">Вконтакте</a></li>
-          </ul>
+    </div>
+    <br><br>
+</div>
+
+<footer class="page-footer red darken-4">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text">Наши контакты</h5>
+                <p class="grey-text text-lighten-4">Достучаться до разработчиков данного произведения искусства можно с помощью:</p>
+            </div>
+            <div class="col l6 s12">
+                <h5 class="white-text">Команда разработчиков</h5>
+                <ul>
+                    <li><a class="white-text text-lighten-3" href="https://t.me/Egor_li">Егор - Телеграм</a></li>
+                    <li><a class="white-text text-lighten-3" href="https://t.me/rammstee1n">Андрей - Телеграм</a></li>
+                    <li><a class="white-text text-lighten-3" href="https://t.me/k1reedz">Кирилл - Телеграм</a></li>
+                    <!-- Add more links as needed -->
+                </ul>
+            </div>
         </div>
-        <div class="col l3 s12">
-          <h5 class="white-text">Кирилл</h5>
-          <ul>
-            <li><a class="light-blue-text" href="#!">Телеграм</a></li>
-            <li><a class="blue-text" href="#!">Вконтакте</a></li>
-          </ul>
-        </div>
-        <div class="col l1 s12">
-          <h5 class="white-text">Андрей</h5>
-          <ul>
-            <li><a class="light-blue-text" href="https://t.me/rammstee1n">Телеграм</a></li>
-            <li><a class="blue-text" href="https://vk.com/rammsteee1n">Вконтакте</a></li>
-          </ul>
-        </div>
-      </div>
     </div>
     <div class="footer-copyright">
-      <div class="container">
-      Сделано <a class="red-text" href="https://lyceum.yandex.ru">студентами лицея академии Яндекс</a>
-      </div>
+        <div class="container">
+            Сделано <a class="orange-text text-lighten-3" href="https://lyceum.yandex.ru">студентами лицея академии Яндекс</a>
+        </div>
     </div>
-  </footer>
+</footer>
 
-
-
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="static/js/materialize.js"></script>
-  <script src="static/js/init.js"></script>
-
-  </body>
+<!--  Scripts-->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="static/js/materialize.js"></script>
+<script src="static/js/init.js"></script>
+</body>
 </html>
