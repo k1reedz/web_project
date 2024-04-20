@@ -487,7 +487,7 @@ def adding_a_training(date):
                                     user_id=current_user_id)
                 session.add(training)
                 session.commit()
-                return redirect("/activities")
+                return redirect("/fitness")
             except:
                 abort(404)
         else:
@@ -495,6 +495,150 @@ def adding_a_training(date):
                                    title_text=title, start_text=start, end_text=end,
                                    type_text=type)
     return render_template('adding_a_training.html', weekdays=weekdays, page_title='Добавить ')
+
+
+@app.route('/activities_change/<int:id>', methods=['POST', 'GET'])
+def activities_change(id):
+    if request.method == "POST":
+        title = request.form['title']
+        type = request.form['type']
+        start = request.form['start']
+        end = request.form['end']
+
+        if bool(title) and datetime.strptime(start, "%H:%M") < datetime.strptime(end, "%H:%M"):
+            try:
+                session = db_session.create_session()
+                training = session.query(Activity).get(id)
+                training.title = title
+                training.type = type
+                training.start = start
+                training.end = end
+                session.add(training)
+                session.commit()
+                return redirect("/fitness")
+            except:
+                abort(404)
+        else:
+            return render_template("adding_a_training.html", inf='Ошибка',
+                                   page_title='Изменить ', title_text=title, start_text=start, end_text=end,
+                                   type_text=type)
+    else:
+        return render_template('adding_a_training.html', weekdays=weekdays, page_title='Изменить ')
+
+
+@app.route('/activities_delete/<int:id>', methods=['GET', 'POST'])
+def activities_delete(id):
+    session = db_session.create_session()
+    training = session.query(Activity).get(id)
+    if training:
+        session.delete(training)
+        session.commit()
+    else:
+        abort(404)
+    return redirect('/fitness')
+
+
+@app.route('/activities_previous')
+def previous():
+    global timedelta_value
+    timedelta_value -= 7
+    return redirect('/fitness')
+
+
+@app.route('/activities_next')
+def next():
+    global timedelta_value
+    timedelta_value += 7
+    return redirect('/fitness')
+
+
+def get_kpfc(product):
+    con = sqlite3.connect('db/products.db')
+    cur = con.cursor()
+    get_kpfc = cur.execute('''SELECT kcal, proteins, fats, carbohydrates FROM products
+    WHERE name = ?''', (product,)).fetchone()
+    con.close()
+    return get_kpfc[0], get_kpfc[1], get_kpfc[2], get_kpfc[3]
+
+
+@app.route("/diet", methods=['POST', 'GET'])
+def diet():
+    if request.method == 'POST':
+        current_date = request.form['input_date']
+    else:
+        current_date = date.today()
+    session = db_session.create_session()
+    products = session.query(Ration).filter(Ration.created_date.like(f'{current_date}%'),
+                                            Ration.user_id == current_user_id).all()
+    sum_kcal, sum_proteins, sum_fats, sum_carbohydrates = float(), float(), float(), float()
+    for item in products:
+        sum_kcal += float(item.total_kcal)
+        sum_proteins += float(item.total_proteins)
+        sum_fats += float(item.total_fats)
+        sum_carbohydrates += float(item.total_carbohydrates)
+    session.close()
+    return render_template("diet.html", products=products, today=date.today(), current_date=current_date,
+                           sum_kcal=sum_kcal, sum_proteins=sum_proteins, sum_fats=sum_fats,
+                           sum_carbohydrates=sum_carbohydrates)
+
+
+@app.route("/diet/adding_a_product", methods=["POST", "GET"])
+def adding_a_product():
+    if request.method == "POST":
+        title = request.form['title']
+        weight = request.form['weight']
+
+        if title not in products_list:
+            return render_template("diet_change.html", products_list=products_list,
+                                   inf='Продукт не найден', title_text='Добавить', weight_text=weight)
+        if bool(title) and bool(weight):
+            try:
+                session = db_session.create_session()
+                kcal, proteins, fats, carbohydrates = get_kpfc(title)
+                if session.query(Ration).filter(Ration.title == title,
+                                                Ration.created_date == date.today()).count() == 0:
+                    product = Ration(title=title, weight=round(float(weight), 1),
+                                     total_kcal=str(round(float(kcal) * float(weight) / 100, 1)),
+                                     total_proteins=str(round(float(proteins) * float(weight) / 100, 1)),
+                                     total_fats=str(round(float(fats) * float(weight) / 100, 1)),
+                                     total_carbohydrates=str(round(float(carbohydrates) * float(weight) / 100, 1)),
+                                     created_date=date.today(),
+                                     user_id=current_user_id)
+                    session.add(product)
+                    session.commit()
+                else:
+                    product = session.query(Ration).filter(Ration.title == title,
+                                                           Ration.created_date == date.today()).first()
+                    product.weight = str(round(product.weight + float(weight), 1))
+                    product.total_kcal = str(round(float(product.total_kcal) + float(kcal) * float(weight) / 100, 1))
+                    product.total_proteins = str(round(float(product.total_proteins) + float(proteins) * float(weight)
+                                                       / 100, 1))
+                    product.total_fats = str(round(float(product.total_fats) + float(fats) * float(weight) / 100, 1))
+                    product.total_carbohydrates = str(round(float(product.total_carbohydrates) +
+                                                            float(carbohydrates) * float(weight) / 100, 1))
+                    session.add(product)
+                    session.commit()
+                return redirect("/diet")
+            except Exception as e:
+                print(e, type(e))
+                abort(404)
+        else:
+            return render_template("diet_change.html", products_list=products_list,
+                                   inf='Заполните все поля', title_text='Добавить', weight_text=weight)
+    else:
+        return render_template("diet_change.html", products_list=products_list, title_text='Добавить')
+
+
+@app.route('/diet_delete/<int:id>', methods=['GET', 'POST'])
+def diet_delete(id):
+    session = db_session.create_session()
+    product = session.query(Ration).get(id)
+    if product:
+        session.delete(product)
+        session.commit()
+    else:
+        abort(404)
+    return redirect('/diet')
 
 
 def main():

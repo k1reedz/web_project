@@ -1,9 +1,6 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
 
 {% block content %}
- <head>
-     <link rel="stylesheet" type="text/css" href="static/css/style.css"/>
- </head>
 <body>
     <a href="/diet/adding_a_product" class="btn btn-outline-success">
                 Добавить продукт в рацион
@@ -14,7 +11,7 @@
                value={{current_date}} min="2024-01-01" max={{today}} />
         <input type="submit" value="Подтвердить" style="background-color: rgb(44,44,44); color: white">
     </form>
-    <h1>Записи в блоге</h1>
+    <h1>Дневной рацион</h1>
     {% for item in products%}
     <div class="col-md6 border rounded">
         <h2>{{item.title}}</h2>
