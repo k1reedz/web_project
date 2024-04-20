@@ -420,9 +420,11 @@ def submit():
 def get_latest_health_data(user_id):
     db_sess = db_session.create_session()
     latest_health_data = db_sess.query(Health).filter(Health.user_id == user_id).order_by(desc(Health.id)).all()
-    latest_date = latest_health_data[0]
-    db_sess.close()
-    return latest_health_data
+    if latest_health_data:
+        latest_date = latest_health_data[0]
+        db_sess.close()
+        return latest_health_data
+
 
 
 @app.route("/advice")
@@ -492,7 +494,7 @@ def adding_a_training(date):
                 abort(404)
         else:
             return render_template("adding_a_training.html", inf='Ошибка', page_title='Добавить ',
-                                   title_text=title, start_text=start, end_text=end,
+                                   title_text=title, start_text=start, end_text=end,  weekdays=weekdays,
                                    type_text=type)
     return render_template('adding_a_training.html', weekdays=weekdays, page_title='Добавить ')
 
@@ -504,21 +506,18 @@ def activities_change(id):
         type = request.form['type']
         start = request.form['start']
         end = request.form['end']
-
-        if bool(title) and datetime.strptime(start, "%H:%M") < datetime.strptime(end, "%H:%M"):
-            try:
-                session = db_session.create_session()
-                training = session.query(Activity).get(id)
-                training.title = title
-                training.type = type
-                training.start = start
-                training.end = end
-                session.add(training)
-                session.commit()
-                return redirect("/fitness")
-            except:
-                abort(404)
-        else:
+        try:
+            if bool(title) and datetime.strptime(start, "%H:%M") < datetime.strptime(end, "%H:%M"):
+                    session = db_session.create_session()
+                    training = session.query(Activity).get(id)
+                    training.title = title
+                    training.type = type
+                    training.start = start
+                    training.end = end
+                    session.add(training)
+                    session.commit()
+                    return redirect("/fitness")
+        except:
             return render_template("adding_a_training.html", inf='Ошибка',
                                    page_title='Изменить ', title_text=title, start_text=start, end_text=end,
                                    type_text=type)
@@ -553,7 +552,7 @@ def next():
 
 
 def get_kpfc(product):
-    con = sqlite3.connect('db/products.db')
+    con = sqlite3.connect('instance/products.db')
     cur = con.cursor()
     get_kpfc = cur.execute('''SELECT kcal, proteins, fats, carbohydrates FROM products
     WHERE name = ?''', (product,)).fetchone()
@@ -627,6 +626,40 @@ def adding_a_product():
                                    inf='Заполните все поля', title_text='Добавить', weight_text=weight)
     else:
         return render_template("diet_change.html", products_list=products_list, title_text='Добавить')
+
+
+@app.route('/diet_change/<int:id>', methods=['GET', 'POST'])
+def diet_change(id):
+    if request.method == "POST":
+        title = request.form['title']
+        weight = request.form['weight']
+
+        if bool(title) and bool(weight):
+            if title not in products_list:
+                return render_template("diet_change.html", products_list=products_list,
+                                       inf='Продукт не найден', title_text=title, weight_text=weight)
+            try:
+                session = db_session.create_session()
+                product = session.query(Ration).get(id)
+                kcal, proteins, fats, carbohydrates = get_kpfc(title)
+                product.title = title
+                product.weight = weight
+                product.total_kcal = str(round(float(product.total_kcal) + float(kcal) * float(weight) / 100))
+                product.total_proteins = str(round(float(product.total_proteins) + float(proteins) * float(weight)
+                                                   / 100))
+                product.total_fats = str(round(float(product.total_fats) + float(fats) * float(weight) / 100))
+                product.total_carbohydrates = str(round(float(product.total_carbohydrates) + float(carbohydrates) *
+                                                  float(weight) / 100))
+                session.add(product)
+                session.commit()
+                return redirect("/diet")
+            except:
+                abort(404)
+        else:
+            return render_template("diet_change.html", products_list=products_list, inf='Заполните все поля',
+                                   title_text='Изменить', weight_text=weight)
+    else:
+        return render_template("diet_change.html", products_list=products_list, title_text='Изменить')
 
 
 @app.route('/diet_delete/<int:id>', methods=['GET', 'POST'])

@@ -7,7 +7,7 @@ from datetime import date
 
 
 class Ration(SqlAlchemyBase, SerializerMixin):
-    __tablename__ = 'ration'
+    __tablename__ = 'Ration'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
