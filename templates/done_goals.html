@@ -1,13 +1,54 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
 
 {% block content %}
+    <style type="text/css">
+        /* Стиль для текста в блоке содержимого */
+        h1, h2, p, a {
+            color: white; /* Устанавливаем цвет текста на белый */
+        }
+
+        /* Стили для карточек */
+        .card-container {
+            display: flex; /* Располагаем карточки в строку */
+            flex-wrap: wrap; /* Разрешаем перенос строк */
+            justify-content: space-between; /* Выравниваем карточки по ширине контейнера */
+        }
+
+        .card {
+            width: calc(33.33% - 20px); /* Ширина карточки (33.33% от ширины контейнера) */
+            margin-bottom: 20px; /* Внешний отступ снизу */
+            padding: 20px; /* Внутренний отступ */
+            background-color: #333; /* Цвет фона карточки */
+            border-radius: 10px; /* Радиус скругления углов */
+        }
+
+        .card h2 {
+            margin-top: 0; /* Убираем верхний отступ у заголовка */
+        }
+
+        .card p {
+            margin-bottom: 10px; /* Внешний отступ снизу у параграфа */
+        }
+
+        .card a {
+            color: white; /* Цвет текста ссылок внутри карточки */
+            text-decoration: none; /* Убираем подчеркивание у ссылок */
+        }
+
+        .card a:hover {
+            text-decoration: underline; /* Подчеркиваем ссылки при наведении */
+        }
+    </style>
+
     <h1>Выполненные цели</h1>
-    <a href="/goals">Цели</a>
-    {% for item in goals %}
-    <div>
-        <h2>{{ item["title"]}}</h2>
-        <p>Описание: {{ item["description"] }}</p>
-        <p>Выполнена: {{item["finish_date"]}}</p>
+    <a class="waves-effect waves-light btn-large" href="goals" style="background: #ffb700"><i class="material-icons left">border_color</i>Цели</a>
+    <div class="card-container">
+        {% for item in goals %}
+            <div class="card">
+                <h2>{{ item["title"]}}</h2>
+                <p>Описание: {{ item["description"] }}</p>
+                <p>Выполнена: {{item["finish_date"]}}</p>
+            </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 {% endblock %}
