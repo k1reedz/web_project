@@ -57,12 +57,6 @@ pyinstaller-hooks-contrib==2022.0
 pymunk==6.5.1
 pyparsing==3.0.6
 pypiwin32==223
-PyQt5==5.15.4
-pyqt5-plugins==5.15.4.2.2
-PyQt5-Qt5==5.15.2
-PyQt5-sip==12.9.1
-PyQt5-stubs==5.15.6.0
-pyqt5-tools==5.15.4.3.2
 python-dateutil==2.8.2
 python-dotenv==0.20.0
 python-telegram-bot==13.12
