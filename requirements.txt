@@ -11,7 +11,7 @@ Pillow
 pipreqs
 requests
 SQLAlchemy
-SQLAlchemy-serializer
+SQLAlchemy-serializer==1.4.1
 sqlparse
 Werkzeug
 WTForms
