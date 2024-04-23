@@ -43,12 +43,9 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads'  # Папка для загруз
 
 
 weekdays = ('Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье')
-week = []
-current_day = date.today()
-timedelta_value = 0
-current_user_id = 1
 con = sqlite3.connect('instance/products.db')
 cur = con.cursor()
+timedelta_value = 0
 all_products = cur.execute('''SELECT name FROM products''').fetchall()
 products_list = []
 for i in all_products:
@@ -462,45 +459,51 @@ def generate_advice(health_entry):
 
 @app.route("/fitness", methods=['POST', 'GET'])
 def activities():
-    global week
-    global current_day
-    current_day = date.today() + timedelta(days=timedelta_value)
+    if request.method == 'POST':
+        current_day = request.form['input_date']
+        print(current_day)
+        current_day = datetime.strptime(current_day, "%Y-%m-%d").date()
+        print(current_day, 'f')
+    else:
+        current_day = date.today()
+    print(current_day)
     today_weekday = current_day.weekday()  # промежуток дней между понедельником и текущим днем
     week = []   # даты всех дней на текущей неделе
     for i in range(7):
         week.append(current_day + timedelta(days=i - today_weekday))
+    print(week)
     session = db_session.create_session()
     week_activities = []
     for j in range(7):
         week_activities.append(session.query(Activity).filter(Activity.date.like(f'{week[j]}%'),
-                                                              Activity.user_id == current_user_id).order_by(
+                                                              Activity.user_id == current_user.id).order_by(
                                                               Activity.start, Activity.end).all())
     session.close()
     return render_template('activities.html', weekdays=weekdays, week=week, week_activities=week_activities)
 
+
 @app.route("/adding_a_training/<date>", methods=['POST', 'GET'])
 def adding_a_training(date):
-    global week
     if request.method == "POST":
         title = request.form['title']
         type = request.form['type']
         start = request.form['start']
         end = request.form['end']
         if bool(title) and datetime.strptime(start, "%H:%M") < datetime.strptime(end, "%H:%M"):
-            try:
-                date = datetime.strptime(date, "%Y-%m-%d")
-                session = db_session.create_session()
-                training = Activity(title=title,
-                                    type=type,
-                                    start=start,
-                                    end=end,
-                                    date=date,
-                                    user_id=current_user_id)
-                session.add(training)
-                session.commit()
-                return redirect("/fitness")
-            except:
-                abort(404)
+            #try:
+            date = datetime.strptime(date, "%Y-%m-%d")
+            session = db_session.create_session()
+            training = Activity(title=title,
+                                type=type,
+                                start=start,
+                                end=end,
+                                date=date,
+                                user_id=current_user.id)
+            session.add(training)
+            session.commit()
+            return redirect("/fitness")
+            #except:
+            #    abort(404)
         else:
             return render_template("adding_a_training.html", inf='Ошибка', page_title='Добавить ',
                                    title_text=title, start_text=start, end_text=end,  weekdays=weekdays,
@@ -546,20 +549,6 @@ def activities_delete(id):
     return redirect('/fitness')
 
 
-@app.route('/activities_previous')
-def previous():
-    global timedelta_value
-    timedelta_value -= 7
-    return redirect('/fitness')
-
-
-@app.route('/activities_next')
-def next():
-    global timedelta_value
-    timedelta_value += 7
-    return redirect('/fitness')
-
-
 def get_kpfc(product):
     con = sqlite3.connect('instance/products.db')
     cur = con.cursor()
@@ -577,7 +566,7 @@ def diet():
         current_date = date.today()
     session = db_session.create_session()
     products = session.query(Ration).filter(Ration.created_date.like(f'{current_date}%'),
-                                            Ration.user_id == current_user_id).all()
+                                            Ration.user_id == current_user.id).all()
     sum_kcal, sum_proteins, sum_fats, sum_carbohydrates = float(), float(), float(), float()
     for item in products:
         sum_kcal += float(item.total_kcal)
@@ -611,7 +600,7 @@ def adding_a_product():
                                      total_fats=str(round(float(fats) * float(weight) / 100, 1)),
                                      total_carbohydrates=str(round(float(carbohydrates) * float(weight) / 100, 1)),
                                      created_date=date.today(),
-                                     user_id=current_user_id)
+                                     user_id=current_user.id)
                     session.add(product)
                     session.commit()
                 else:
