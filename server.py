@@ -100,7 +100,7 @@ def login():
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
+            login_user(user, remember=True)
             return redirect("/profile")
         return render_template('login.html',
                                message="Неправильный логин или пароль",
@@ -223,6 +223,9 @@ def render_schedule():
                 message = "Ошибка"
         else:
             message = "Событие успешно добавлено"
+        form.end_time.data = ""
+        form.start_time.data = ""
+        form.name.data = ""
     else:
         message = ""
     return render_template("schedule.html", form=form, tasks=tasks, message=message)

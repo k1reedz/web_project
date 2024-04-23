@@ -48,7 +48,7 @@
             <div class="card">
                 <h2>{{ item["title"]}}</h2>
                 <p>Описание: {{ item["description"] }}</p>
-                <p>Выполнена: {{item["finish_date"]}}</p>
+                <p>Выполнена: {{item["finish_date"][:10]}}</p>
             </div>
         {% endfor %}
     </div>
