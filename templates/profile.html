@@ -84,13 +84,24 @@
       </div>
       <div class="row">
         <div class="input-field col s6">
-          <input id="age" type="number" class="validate" min="0" name="age" value="{{ user.stats['age'] }}">
+          <input id="age" type="number" class="validate" name="age" value="{{ user.stats['age'] }}">
           <label for="age">Возраст</label>
         </div>
-        <div class="input-field col s6">
-          <input id="gender" type="text" class="validate" name="gender" value="{{ user.stats['gender'] }}">
-          <label for="gender">Пол</label>
-        </div>
+        <div class="row">
+    <label>Пол</label>
+  <div class="col s6">
+    <label>
+      <input class="with-gap" name="gender" type="radio" value="Мужской" {{ 'checked' if user.stats['gender'] == 'Мужской' else '' }}>
+      <span>Мужской</span>
+    </label>
+  </div>
+  <div class="col s6">
+    <label>
+      <input class="with-gap" name="gender" type="radio" value="Женский" {{ 'checked' if user.stats['gender'] == 'Женский' else '' }}>
+      <span>Женский</span>
+    </label>
+  </div>
+</div>
       </div>
       <div class="row">
         <div class="input-field col s6">
