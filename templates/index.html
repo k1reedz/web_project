@@ -16,7 +16,8 @@
       <a id="logo-container" href="/" class="brand-logo" style="color: #ffb700">Яндекс.Фитнес</a>
         {% if current_user.is_authenticated %}
         <ul class="right hide-on-med-and-down">
-            <li><a href="/profile" class="yellow darken-2 white-text">{{current_user.name}}</a></li>
+            <li><a href="/profile" class="yellow darken-4 white-text">{{current_user.name}}</a></li>
+             <li><a href="/logout" class="red darken-1 white-text">Выйти</a></li>
         </ul>
         {% else %}
 
@@ -90,7 +91,6 @@
                 <ul>
                     <li><a class="white-text text-lighten-3" href="https://t.me/Egor_li">Егор - Телеграм</a></li>
                     <li><a class="white-text text-lighten-3" href="https://t.me/rammstee1n">Андрей - Телеграм</a></li>
-                    <li><a class="white-text text-lighten-3" href="https://t.me/k1reedz">Кирилл - Телеграм</a></li>
                     <!-- Add more links as needed -->
                 </ul>
             </div>
