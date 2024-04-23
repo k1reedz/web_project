@@ -45,7 +45,6 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads'  # Папка для загруз
 weekdays = ('Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье')
 con = sqlite3.connect('instance/products.db')
 cur = con.cursor()
-timedelta_value = 0
 all_products = cur.execute('''SELECT name FROM products''').fetchall()
 products_list = []
 for i in all_products:
