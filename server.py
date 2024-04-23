@@ -396,16 +396,16 @@ def health():
 def submit():
     # Получение данных из формы
     db_sess = db_session.create_session()
-    weight = request.form.get('weight', type=float)
-    water = request.form.get('water', type=float)
-    activity = request.form.get('activity', type=int)
-    heart_rate = request.form.get('heart_rate', type=int)
-    mental = request.form.get('mental', type=int)
-    steps = request.form.get('steps', type=int)
+    weight = request.form.get('weight', type=float, default=0.0)
+    water = request.form.get('water', type=float, default=0.0)
+    activity = request.form.get('activity', type=int, default=0)
+    heart_rate = request.form.get('heart_rate', type=int, default=0)
+    mental = request.form.get('mental', type=int, default=0)
+    steps = request.form.get('steps', type=int, default=0)
 
     # Создание нового объекта данных и добавление его в базу данных
     new_data = Health(weight=weight, water=water, activity=activity,
-                          heart_rate=heart_rate, mental=mental, steps=steps, user_id=current_user.id)
+                      heart_rate=heart_rate, mental=mental, steps=steps, user_id=current_user.id)
     db_sess.add(new_data)
     db_sess.commit()
     db_sess.close()
@@ -424,7 +424,6 @@ def get_latest_health_data(user_id):
         latest_date = latest_health_data[0]
         db_sess.close()
         return latest_health_data
-
 
 
 @app.route("/advice")
@@ -448,6 +447,13 @@ def generate_advice(health_entry):
         advice.append("Постарайтесь уменьшить уровень стресса, возможно, стоит обратиться к специалисту.")
     if health_entry.water < 2:
         advice.append("Не забывайте употреблять достаточное количество воды в течение дня.")
+    if health_entry.water > 3:
+        advice.append("Слишком высокое потребление воды может быть вредным для организма."
+                      " Убедитесь, что вы выпиваете воды в разумных количествах.")
+    if health_entry.heart_rate < 60:
+        advice.append("Пульс слишком низкий. Обратитесь к врачу для дополнительной консультации.")
+    elif health_entry.heart_rate > 80:
+        advice.append("Пульс слишком высокий. Обратитесь к врачу для дополнительной консультации.")
     return advice
 
 
