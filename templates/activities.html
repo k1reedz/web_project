@@ -1,49 +1,13 @@
-{% extends "base2.html" %}
-
-{% block content %}
-<style>
-    body {
-        color: white; /* Устанавливаем белый цвет текста */
-        background-color: #333; /* Темный фон для контраста */
-    }
-
-    .btn {
-        background-color: #ffb700; /* Жёлтый фон кнопок */
-        border: none; /* Убираем границу */
-        color: white; /* Белый цвет текста кнопок */
-        padding: 8px 16px; /* Отступы внутри кнопок */
-        margin-right: 10px; /* Отступ справа для кнопок */
-        text-decoration: none; /* Без подчеркивания для ссылок */
-        transition: background-color 0.3s, color 0.3s; /* Плавное изменение цвета */
-    }
-
-    .btn:hover {
-        background-color: #ff7043; /* Красный светлый фон при наведении */
-    }
-
-    .border {
-        padding: 10px; /* Отступы внутри контейнера */
-        margin-bottom: 20px; /* Отступ снизу для контейнеров */
-    }
-
-    .rounded {
-        border-radius: 8px; /* Скругленные углы */
-    }
-
-    p {
         margin-bottom: 10px; /* Отступ снизу для абзацев */
     }
 </style>
 
 <body>
-    <div>
-        <a href="/activities_previous" class="btn">
-            <
-        </a>
-        <a href="/activities_next" class="btn">
-            >
-        </a>
-    </div>
+    <form method="post">
+        <input type="date" id="start" name="input_date" style="background-color: rgb(44,44,44); color: white"
+               value={{current_date}} min="2024-01-01" max={{today}} />
+        <input type="submit" value="Подтвердить" style="background-color: rgb(44,44,44); color: white">
+    </form>
 
     {% for activity in week_activities %}
     {% set index = loop.index0 %}
