@@ -58,21 +58,32 @@ def index():
     return render_template("index.html")
 
 
+# Страница регистрации пользователя
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    # Проверка, авторизован ли уже пользователь
     if current_user.is_authenticated:
         return redirect("/profile")
+
+    # Создание формы регистрации
     form = RegisterForm()
+
+    # Обработка данных из формы после отправки
     if form.validate_on_submit():
+        # Проверка совпадения паролей
         if form.password.data != form.password_again.data:
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Пароли не совпадают")
+
+        # Подключение к базе данных и проверка наличия пользователя с таким же email
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Пользователь с таким email уже существует")
+
+        # Создание нового пользователя и добавление его в базу данных
         user = User(
             surname=form.surname.data,
             name=form.name.data,
@@ -83,27 +94,44 @@ def register():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
+
+        # Перенаправление на страницу авторизации после успешной регистрации
         return redirect('/login')
+
+    # Отображение страницы регистрации с формой
     return render_template('register.html', title='Регистрация', form=form)
 
 
+# Страница авторизации пользователя
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # Проверка, авторизован ли уже пользователь
     if current_user.is_authenticated:
         return redirect("/profile")
+
+    # Создание формы авторизации
     form = LoginForm()
+
+    # Обработка данных из формы после отправки
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
+
+        # Проверка существования пользователя и корректности пароля
         if user and user.check_password(form.password.data):
             login_user(user, remember=True)
             return redirect("/profile")
+
+        # В случае неверных данных отображается сообщение об ошибке
         return render_template('login.html',
                                message="Неправильный логин или пароль",
                                form=form)
+
+    # Отображение страницы авторизации с формой
     return render_template('login.html', title='Авторизация', form=form)
 
 
+# Выход из учетной записи
 @app.route('/logout')
 @login_required
 def logout():
@@ -111,39 +139,54 @@ def logout():
     return redirect("/")
 
 
+# Загрузка пользователя при входе
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).filter(User.id == user_id).first()
 
 
+# Обработчик ошибки 404 (страница не найдена)
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 
+# Обработчик ошибки 400 (неверный запрос)
 @app.errorhandler(400)
 def bad_request(_):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
 
 
+# Страница со списком целей пользователя
 @app.route("/goals")
 def render_goals():
     if not current_user.is_authenticated:
         return redirect("/login")
+
+    # Запрос списка целей пользователя из внешнего API
     goals = requests.get(f"{address}/api/goals/{str(current_user.id)}")
+
+    # Обработка ответа от API
     if goals.status_code == 200:
         goals = goals.json()["goals"]
     else:
         goals = []
+
+    # Отображение страницы с целями
     return render_template("goals.html", goals=goals)
 
 
+# Страница для добавления новой цели пользователя
 @app.route("/add_goal", methods=["POST", "GET"])
 def add_goal():
     if not current_user.is_authenticated:
         return redirect("/login")
+
+    # Создание формы для добавления цели
     form = GoalForm()
+
+    # Обработка данных из формы после отправки
     if form.validate_on_submit():
         data = {
             "title": form.title.data,
@@ -153,53 +196,74 @@ def add_goal():
             "user_id": current_user.id,
             "accomplished": False
         }
+
+        # Отправка данных новой цели на внешнее API
         requests.post(f"{address}/api/add_goal/", json=jsonify(data).json)
+
+        # Перенаправление на страницу с целями после добавления новой цели
         return redirect('/goals')
+
+    # Отображение страницы с формой добавления цели
     return render_template("goal_form.html", form=form)
 
 
+# Удаление цели пользователя
 @app.route("/delete_goal/<int:goal_id>", methods=["DELETE", "POST", "GET"])
 def delete_goal(goal_id):
     requests.delete(f"{address}/api/goal/{str(goal_id)}")
     return redirect('/goals')
 
 
+# Страница со списком выполненных целей пользователя
 @app.route("/done_goals", methods=["GET"])
 def render_done_goals():
     if not current_user.is_authenticated:
         return redirect("/login")
+
+    # Запрос списка выполненных целей пользователя из внешнего API
     goals_response = requests.get(f"{address}/api/done_goals/{str(current_user.id)}")
+
+    # Обработка ответа от API
     if goals_response.status_code == 200:
         goals_data = goals_response.json()
         goals = goals_data["goals"]
-        # Обновляем формат даты выполнения в каждой цели
         for goal in goals:
-            # Преобразуем строку времени выполнения в объект datetime
             finish_date = datetime.strptime(goal["finish_date"], "%Y-%m-%d %H:%M:%S")
-            # Форматируем дату и время с учетом формата, используемого в вашем приложении
             goal["finish_date"] = finish_date.strftime("%d.%m.%Y %H:%M:%S")
     else:
         goals = []
+
+    # Отображение страницы со списком выполненных целей
     return render_template("done_goals.html", goals=goals)
 
 
+# Отметка цели как выполненной
 @app.route("/finish_goal/<int:goal_id>", methods=["PUT", "GET"])
 def done_goal(goal_id):
     requests.put(f"{address}/api/goal/{str(goal_id)}", json=jsonify({"accomplished": True, "finish_date":
-                                                                          datetime.now().date().strftime("%d.%m.%Y")}).json)
+        datetime.now().date().strftime("%d.%m.%Y")}).json)
     return redirect("/done_goals")
 
 
+# Страница с расписанием задач пользователя
 @app.route("/schedule", methods=["GET", "POST"])
 def render_schedule():
     if not current_user.is_authenticated:
         return redirect("/login")
+
+    # Запрос расписания задач пользователя из внешнего API
     tasks = requests.get(f"{address}/api/tasks_weekday/{str(current_user.id)}")
+
+    # Обработка ответа от API
     if tasks.status_code != 200:
         tasks = dict()
     else:
         tasks = tasks.json()
+
+    # Создание формы для добавления новой задачи
     form = TaskForm()
+
+    # Обработка данных из формы после отправки
     if form.validate_on_submit():
         data = {
             "task_name": form.name.data,
@@ -208,7 +272,11 @@ def render_schedule():
             "end": form.end_time.data,
             "user_id": current_user.id,
         }
+
+        # Отправка данных новой задачи на внешнее API
         response = requests.post(f"{address}/api/task", json=jsonify(data).json)
+
+        # Обработка ответа от API и отображение сообщения пользователю
         if response.status_code != 200:
             error_type = response.json()["error"]
             if error_type == "Time format error":
@@ -219,21 +287,27 @@ def render_schedule():
                 message = "Ошибка"
         else:
             message = "Событие успешно добавлено"
+
+        # Сброс полей формы
         form.end_time.data = ""
         form.start_time.data = ""
         form.name.data = ""
+
     else:
         message = ""
+
+    # Отображение страницы с расписанием задач
     return render_template("schedule.html", form=form, tasks=tasks, message=message)
 
 
+# Удаление задачи пользователя
 @app.route("/delete_task/<int:task_id>", methods=["DELETE", "GET"])
 def delete_task(task_id):
     requests.delete(f"{address}/api/task/{str(task_id)}")
     return redirect('/schedule')
 
 
-# Создаем таблицы в базах данных, если они не существуют
+# Создание таблиц в базе данных, если они не существуют
 with app.app_context():
     db.create_all()
 
@@ -303,39 +377,42 @@ def profile():
     if not current_user.is_authenticated:
         return redirect("/")
 
-    # Get the SQLAlchemy session
+    # Получение сессии SQLAlchemy
     db_sess = db_session.create_session()
 
+    # Получение данных о текущем пользователе
     user = db_sess.query(User).filter(User.id == current_user.id).first()
+
     if request.method == 'POST':
         try:
-            # Update the user profile
+            # Обновление профиля пользователя
             user.name = request.form['username']
             user.email = request.form['email']
             user.stats["age"] = request.form['age']
             user.stats["gender"] = request.form['gender']
             user.stats["height"] = request.form['height']
             user.stats["about"] = request.form['about_me']
+
+            # Обновление изображения профиля, если оно загружено
             if 'profile_image' in request.files:
-                # Update the profile image if it's uploaded
                 file = request.files['profile_image']
                 if file.filename != '':
-                    # Save the new profile image
                     user.stats["profile_image"] = save_picture(file)
-            orm.attributes.flag_modified(user, 'stats')
 
-            # Commit the changes to the database
+            # Подтверждение изменений в базе данных
+            orm.attributes.flag_modified(user, 'stats')
             db_sess.commit()
 
-            # Update the current user with the updated data
+            # Обновление текущего пользователя с обновленными данными
             login_user(user)
 
             return redirect(url_for('profile'))
         except Exception as e:
-            # Handle exceptions, such as validation errors or database errors
+            # Обработка исключений, таких как ошибки валидации или ошибки базы данных
             db_sess.rollback()
-            flash("An error occurred while updating the profile.", "error")
-    # Close the SQLAlchemy session
+            flash("Произошла ошибка при обновлении профиля.", "error")
+
+    # Закрытие сессии SQLAlchemy
     db_sess.close()
 
     return render_template('profile.html', user=user)
@@ -344,7 +421,7 @@ def profile():
 @app.route('/update_profile', methods=['POST', 'GET'])
 def update_profile():
     if request.method == 'POST':
-        # Обновляем профиль пользователя
+        # Обновление профиля пользователя
         username = request.form['username']
         email = request.form['email']
         age = request.form['age']
@@ -356,7 +433,7 @@ def update_profile():
         # Находим пользователя по ID
         user = User.query.get(current_user.id)
         if user:
-            # Удаляем предыдущее изображение, если оно существует и не является изображением по умолчанию
+            # Удаляем предыдущее изображение профиля, если оно существует и не является изображением по умолчанию
             if user.profile_image != 'default.jpg':
                 os.remove(os.path.join(app.root_path, 'static/uploads', user.profile_image))
 
@@ -467,7 +544,7 @@ def activities():
         current_day = date.today()
     print(current_day)
     today_weekday = current_day.weekday()  # промежуток дней между понедельником и текущим днем
-    week = []   # даты всех дней на текущей неделе
+    week = []  # даты всех дней на текущей неделе
     for i in range(7):
         week.append(current_day + timedelta(days=i - today_weekday))
     print(week)
@@ -476,7 +553,7 @@ def activities():
     for j in range(7):
         week_activities.append(session.query(Activity).filter(Activity.date.like(f'{week[j]}%'),
                                                               Activity.user_id == current_user.id).order_by(
-                                                              Activity.start, Activity.end).all())
+            Activity.start, Activity.end).all())
     session.close()
     return render_template('activities.html', weekdays=weekdays, week=week, week_activities=week_activities)
 
@@ -489,7 +566,7 @@ def adding_a_training(date):
         start = request.form['start']
         end = request.form['end']
         if bool(title) and datetime.strptime(start, "%H:%M") < datetime.strptime(end, "%H:%M"):
-            #try:
+            # try:
             date = datetime.strptime(date, "%Y-%m-%d")
             session = db_session.create_session()
             training = Activity(title=title,
@@ -501,11 +578,11 @@ def adding_a_training(date):
             session.add(training)
             session.commit()
             return redirect("/fitness")
-            #except:
+            # except:
             #    abort(404)
         else:
             return render_template("adding_a_training.html", inf='Ошибка', page_title='Добавить ',
-                                   title_text=title, start_text=start, end_text=end,  weekdays=weekdays,
+                                   title_text=title, start_text=start, end_text=end, weekdays=weekdays,
                                    type_text=type)
     return render_template('adding_a_training.html', weekdays=weekdays, page_title='Добавить ')
 
@@ -519,15 +596,15 @@ def activities_change(id):
         end = request.form['end']
         try:
             if bool(title) and datetime.strptime(start, "%H:%M") < datetime.strptime(end, "%H:%M"):
-                    session = db_session.create_session()
-                    training = session.query(Activity).get(id)
-                    training.title = title
-                    training.type = type
-                    training.start = start
-                    training.end = end
-                    session.add(training)
-                    session.commit()
-                    return redirect("/fitness")
+                session = db_session.create_session()
+                training = session.query(Activity).get(id)
+                training.title = title
+                training.type = type
+                training.start = start
+                training.end = end
+                session.add(training)
+                session.commit()
+                return redirect("/fitness")
         except:
             return render_template("adding_a_training.html", inf='Ошибка',
                                    page_title='Изменить ', title_text=title, start_text=start, end_text=end,
@@ -646,7 +723,7 @@ def diet_change(id):
                                                    / 100))
                 product.total_fats = str(round(float(product.total_fats) + float(fats) * float(weight) / 100))
                 product.total_carbohydrates = str(round(float(product.total_carbohydrates) + float(carbohydrates) *
-                                                  float(weight) / 100))
+                                                        float(weight) / 100))
                 session.add(product)
                 session.commit()
                 return redirect("/diet")
