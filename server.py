@@ -496,10 +496,8 @@ def submit():
 def get_latest_health_data(user_id):
     db_sess = db_session.create_session()
     latest_health_data = db_sess.query(Health).filter(Health.user_id == user_id).order_by(desc(Health.id)).all()
-    if latest_health_data:
-        latest_date = latest_health_data[0]
-        db_sess.close()
-        return latest_health_data
+    db_sess.close()
+    return latest_health_data
 
 
 @app.route("/advice")
@@ -531,7 +529,6 @@ def generate_advice(health_entry):
     elif health_entry.heart_rate > 80:
         advice.append("Пульс слишком высокий. Обратитесь к врачу для дополнительной консультации.")
     return advice
-
 
 @app.route("/fitness", methods=['POST', 'GET'])
 def activities():
