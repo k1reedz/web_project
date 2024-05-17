@@ -1,6 +1,5 @@
 import sqlalchemy
 from sqlalchemy_serializer import SerializerMixin
-from sqlalchemy import create_engine
 from sqlalchemy import orm
 from .db_session import SqlAlchemyBase
 

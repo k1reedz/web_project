@@ -45,11 +45,6 @@
         <i class="material-icons left">add</i>Добавить продукт в рацион
     </a>
     <div style="color: white; font-size: 20px">Итог: {{sum_kcal}} ккал. {{sum_proteins}}г. белков {{sum_fats}}г. жиров {{sum_carbohydrates}}г. углеводов</div>
-    <form method="post">
-        <input type="date" id="start" name="input_date" style="background-color: rgb(44,44,44); color: white"
-               value={{current_date}} min="2024-01-01" max={{today}} />
-        <input type="submit" value="Подтвердить" style="background-color: rgb(44,44,44); color: white">
-    </form>
     <h1>Дневной рацион</h1>
     <div class="card-container">
         {% for item in products %}

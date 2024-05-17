@@ -6,14 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="588fa73e-a5a2-4265-9ca3-892c40a47300" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/activity.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/activity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/ration.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/ration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tasks_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/tasks_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/users.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/users.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/forms/goal_form.py" beforeDir="false" afterPath="$PROJECT_DIR$/forms/goal_form.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/forms/user_form.py" beforeDir="false" afterPath="$PROJECT_DIR$/forms/user_form.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/instance/users.db" beforeDir="false" afterPath="$PROJECT_DIR$/instance/users.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/plots_1713812287.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/done_goals.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/done_goals.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/goals.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/goals.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/plots_1713873770.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/diet.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/diet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/diet_change.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/diet_change.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/health.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/health.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/schedule.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/schedule.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,6 +173,7 @@
       <workItem from="1713650237226" duration="457000" />
       <workItem from="1713807621874" duration="1923000" />
       <workItem from="1713871008141" duration="3139000" />
+      <workItem from="1715953135598" duration="3493000" />
     </task>
     <servers />
   </component>
@@ -186,7 +192,7 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/users_db$server.coverage" NAME="server Coverage Results" MODIFIED="1713873531935" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/users_db$server.coverage" NAME="server Coverage Results" MODIFIED="1715956272901" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/users_db$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1713808032844" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -65,7 +65,7 @@
         </span>
         <span>
             {{ form.start_time.label }}<br>
-            {{ form.start_time(class="form-control") }}<br>
+            {{ form.start_time(class="form-control", type="time") }}<br>
             {% for error in form.start_time.errors %}
         <span class="alert alert-danger" role="alert">
             {{ error }}
@@ -74,7 +74,7 @@
         </span>
         <span>
             {{ form.end_time.label }}<br>
-            {{ form.end_time(class="form-control") }}<br>
+            {{ form.end_time(class="form-control", type="time") }}<br>
             {% for error in form.end_time.errors %}
         <span class="alert alert-danger" role="alert">
             {{ error }}

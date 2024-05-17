@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired
 
 now = datetime.now()
 
+
 class GoalForm(FlaskForm):
     title = StringField('Цель', validators=[DataRequired()])
     description = StringField('Описание', default="Отстутствует")

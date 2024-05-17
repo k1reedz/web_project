@@ -73,16 +73,13 @@ def add_task():
                                                  "weekday"]):
         return make_response(jsonify({'error': 'Bad request'}), 400)
     other_tasks = get_tasks_by_id(request.json["user_id"])
-    try:
-        start1, end1 = datetime.strptime(request.json["start"], "%H:%M"), \
-                       datetime.strptime(request.json["end"], "%H:%M")
-    except ValueError:
-        return make_response(jsonify({"error": "Time format error"}), 400)
+    start1, end1 = datetime.strptime(request.json["start"], "%H:%M"), \
+                   datetime.strptime(request.json["end"], "%H:%M")
     if other_tasks.status_code != 404:
         for task in other_tasks.json["tasks"]:
             if task["weekday"] == request.json["weekday"]:
                 start2, end2 = datetime.strptime(task["start"], "%H:%M"), datetime.strptime(task["end"], "%H:%M")
-                if start2 <= start1 < end2 or start2 < end1 <= end2:
+                if start2 <= start1 < end2 or start2 < end1 <= end2 or start1 <= start2 < end1 or start1 < end2 <= end1:
                     return make_response(jsonify({"error": "Time span is busy"}), 400)
 
     db_sess = db_session.create_session()

@@ -279,9 +279,7 @@ def render_schedule():
         # Обработка ответа от API и отображение сообщения пользователю
         if response.status_code != 200:
             error_type = response.json()["error"]
-            if error_type == "Time format error":
-                message = "Неправильный формат времени"
-            elif error_type == "Time span is busy":
+            if error_type == "Time span is busy":
                 message = "Промежуток времени уже занят"
             else:
                 message = "Ошибка"
@@ -292,7 +290,7 @@ def render_schedule():
         form.end_time.data = ""
         form.start_time.data = ""
         form.name.data = ""
-
+        return render_template("schedule.html", form=form, tasks=tasks, message=message)
     else:
         message = ""
 
@@ -497,7 +495,6 @@ def get_latest_health_data(user_id):
     db_sess = db_session.create_session()
     latest_health_data = db_sess.query(Health).filter(Health.user_id == user_id).order_by(desc(Health.id)).all()
     if latest_health_data:
-        latest_date = latest_health_data[0]
         db_sess.close()
         return latest_health_data
 
@@ -537,17 +534,13 @@ def generate_advice(health_entry):
 def activities():
     if request.method == 'POST':
         current_day = request.form['input_date']
-        print(current_day)
         current_day = datetime.strptime(current_day, "%Y-%m-%d").date()
-        print(current_day, 'f')
     else:
         current_day = date.today()
-    print(current_day)
     today_weekday = current_day.weekday()  # промежуток дней между понедельником и текущим днем
     week = []  # даты всех дней на текущей неделе
     for i in range(7):
         week.append(current_day + timedelta(days=i - today_weekday))
-    print(week)
     session = db_session.create_session()
     week_activities = []
     for j in range(7):
@@ -636,10 +629,7 @@ def get_kpfc(product):
 
 @app.route("/diet", methods=['POST', 'GET'])
 def diet():
-    if request.method == 'POST':
-        current_date = request.form['input_date']
-    else:
-        current_date = date.today()
+    current_date = date.today()
     session = db_session.create_session()
     products = session.query(Ration).filter(Ration.created_date.like(f'{current_date}%'),
                                             Ration.user_id == current_user.id).all()
