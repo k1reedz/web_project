@@ -290,6 +290,11 @@ def render_schedule():
         form.end_time.data = ""
         form.start_time.data = ""
         form.name.data = ""
+        tasks = requests.get(f"{address}/api/tasks_weekday/{str(current_user.id)}")
+        if tasks.status_code != 200:
+            tasks = dict()
+        else:
+            tasks = tasks.json()
         return render_template("schedule.html", form=form, tasks=tasks, message=message)
     else:
         message = ""
