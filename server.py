@@ -58,47 +58,47 @@ def index():
     return render_template("index.html")
 
 
+def calculate_age(birth_date):
+    today = datetime.today()
+    age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+    return age
+
+
 # Страница регистрации пользователя
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    # Проверка, авторизован ли уже пользователь
     if current_user.is_authenticated:
         return redirect("/profile")
 
-    # Создание формы регистрации
     form = RegisterForm()
-
-    # Обработка данных из формы после отправки
     if form.validate_on_submit():
-        # Проверка совпадения паролей
         if form.password.data != form.password_again.data:
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Пароли не совпадают")
 
-        # Подключение к базе данных и проверка наличия пользователя с таким же email
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Пользователь с таким email уже существует")
 
-        # Создание нового пользователя и добавление его в базу данных
+        date_of_birth = datetime.strptime(form.date_of_birth.data, '%d.%m.%Y')
+        age = calculate_age(date_of_birth)
+
         user = User(
             surname=form.surname.data,
             name=form.name.data,
-            date_of_birth=form.date_of_birth.data,
-            stats={"gender": "", "height": 0, "profile_image": ".jpg", "age": "", "about": ""},
+            date_of_birth=date_of_birth,
+            stats={"gender": "", "height": 0, "profile_image": ".jpg", "age": age, "about": ""},
             email=form.email.data,
         )
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
 
-        # Перенаправление на страницу авторизации после успешной регистрации
         return redirect('/login')
 
-    # Отображение страницы регистрации с формой
     return render_template('register.html', title='Регистрация', form=form)
 
 
@@ -359,18 +359,21 @@ def generate_plots(weight_data, water_data, activity_data, heart_rate_data, ment
     for i, data in enumerate(data_arrays):
         plt.subplot(2, 3, i + 1)
         plt.plot(range(1, len(data) + 1), data, marker='o', color=colors[i])
-        plt.title(titles[i], fontsize=16, color='black')
-        plt.xlabel('Измерение', fontsize=12, color='black')
-        plt.ylabel(titles[i], fontsize=12, color='black')
-        plt.xticks(color='black')
-        plt.yticks(color='black')
+        plt.title(titles[i], fontsize=16, color='white')  # Изменяем цвет заголовка
+        plt.xlabel('Измерение', fontsize=12, color='white')  # Изменяем цвет подписи по оси x
+        plt.ylabel(titles[i], fontsize=12, color='white')  # Изменяем цвет подписи по оси y
+        plt.xticks(color='white')  # Изменяем цвет делений по оси x
+        plt.yticks(color='white')  # Изменяем цвет делений по оси y
+        # Убираем фон у графика и изменяем цвет текста
+        plt.gca().set_facecolor('none')
+        plt.gca().tick_params(axis='both', colors='white')
     plt.tight_layout()
     timestamp = int(time.time())
     plot_file = f'static/plots_{timestamp}.png'
     for filename in os.listdir('./static/'):
         if filename.startswith('plots_'):
             os.remove(os.path.join('./static/', filename))
-    plt.savefig(plot_file)
+    plt.savefig(plot_file, transparent=True)  # Сохраняем график с прозрачным фоном
     plt.close()
     return plot_file
 
@@ -380,42 +383,39 @@ def profile():
     if not current_user.is_authenticated:
         return redirect("/")
 
-    # Получение сессии SQLAlchemy
     db_sess = db_session.create_session()
-
-    # Получение данных о текущем пользователе
     user = db_sess.query(User).filter(User.id == current_user.id).first()
 
     if request.method == 'POST':
         try:
-            # Обновление профиля пользователя
             user.name = request.form['username']
             user.email = request.form['email']
-            user.stats["age"] = request.form['age']
+
+            # Обновление возраста, если дата рождения изменена
+            if 'date_of_birth' in request.form:
+                date_of_birth = datetime.strptime(request.form['date_of_birth'], '%Y-%m-%d')
+                user.date_of_birth = date_of_birth
+                user.stats["age"] = calculate_age(date_of_birth)
+
             user.stats["gender"] = request.form['gender']
             user.stats["height"] = request.form['height']
             user.stats["about"] = request.form['about_me']
 
-            # Обновление изображения профиля, если оно загружено
             if 'profile_image' in request.files:
                 file = request.files['profile_image']
                 if file.filename != '':
                     user.stats["profile_image"] = save_picture(file)
 
-            # Подтверждение изменений в базе данных
             orm.attributes.flag_modified(user, 'stats')
             db_sess.commit()
 
-            # Обновление текущего пользователя с обновленными данными
             login_user(user)
 
             return redirect(url_for('profile'))
         except Exception as e:
-            # Обработка исключений, таких как ошибки валидации или ошибки базы данных
             db_sess.rollback()
             flash("Произошла ошибка при обновлении профиля.", "error")
 
-    # Закрытие сессии SQLAlchemy
     db_sess.close()
 
     return render_template('profile.html', user=user)
@@ -467,7 +467,10 @@ def update_profile():
 # Определяем маршрут для отображения главной страницы
 @app.route('/health')
 def health():
-    return render_template('health.html')
+    weight_data, water_data, activity_data, heart_rate_data, mental_data, steps_data = get_data_from_db()
+    plot_file = generate_plots(weight_data, water_data, activity_data, heart_rate_data, mental_data, steps_data)
+
+    return render_template('health.html', image_file=plot_file)
 
 
 # Определяем маршрут для обработки отправленной формы

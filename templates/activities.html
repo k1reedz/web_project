@@ -2,16 +2,16 @@
 {% block content %}
 <body>
     <form method="post">
-        <input type="date" id="start" name="input_date" style="background-color: rgb(44,44,44); color: white"
-               value={{current_date}} min="2024-01-01" max={{today}} />
-        <input type="submit" value="Подтвердить" style="background-color: rgb(44,44,44); color: white">
-    </form>
+    <input type="date" id="start" name="input_date" style="background-color: rgb(44,44,44); color: white"
+           value="{{ current_date }}" min="2024-01-01" max="{{ today }}" required pattern="\d{4}-\d{2}-\d{2}" />
+    <input class="btn" style="background: #F44336" type="submit" value="Подтвердить">
+</form>
 
     {% for activity in week_activities %}
     {% set index = loop.index0 %}
     <div class="col-md6 border rounded" style="margin-top: 10px;">
         <p><b>{{weekdays[index]}}</b> {{week[index]}}
-            <a href="/adding_a_training/{{week[index]}}" class="btn" style="float: right;">
+            <a href="/adding_a_training/{{week[index]}}" class="btn yellow darken-3" style="float: right;">
                 Добавить
             </a>
         </p>
@@ -21,10 +21,10 @@
             <p>
                 Название - {{training.title}}, тип - {{training.type}}<br/>
                 {{training.start}} - {{training.end}}<br/>
-                <a href="/activities_change/{{training.id}}" class="btn">
+                <a href="/activities_change/{{training.id}}" class="btn red lighten-1">
                     Изменить
                 </a>
-                <a href="/activities_delete/{{training.id}}" class="btn">
+                <a href="/activities_delete/{{training.id}}" class="btn yellow darken-4">
                     Удалить
                 </a>
             </p>

@@ -81,11 +81,11 @@
         </span>
         {% endfor %}
         </span>
-        <span>{{ form.submit(type="submit", class="btn btn-primary", style="background: #ffb700") }}</span>
+        <span>{{ form.submit(type="submit", class="btn btn-primary", style="background: #F44336") }}</span>
         <p>{{message}}</p>
     </form>
     <br>
-    <button type="button" class="red btn btn-primary" >Для удаления события нажмите на его название</button>>
+    <button type="button" class="red btn btn-primary" >Для удаления события нажмите на его название</button>
     <br>
     <table>
         <tr>
@@ -98,7 +98,7 @@
             <th>Суббота</th>
             <th>Воскресенье</th>
         </tr>
-        {% for counter in range(5, 24) %}
+        {% for counter in range(0, 24) %}
             <tr>
                 <th>{{counter}}:00-{{counter + 1}}:00</th>
                 <th>

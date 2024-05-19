@@ -24,7 +24,7 @@
     }
 
     input[type="submit"]:hover {
-        background-color: #ffb700; /* Желтый фон при наведении */
+        background-color: #f9a825; /* Желтый фон при наведении */
     }
 
     form div {
@@ -35,15 +35,16 @@
 <body>
     <h1>{{page_title}} тренировку</h1>
     <form method="post">
-        <div>
-            <input type="text" name="title" placeholder="Название" value={{title_text}}>
-            <input type="text" name="type" placeholder="Тип" value={{type_text}}>
-        </div>
-        <div>
-            <input type="time" name="start" value={{start_text}}>-<input type="time" name="end" value={{end_text}}>
-        </div>
-        <input type="submit" value={{page_title}}>
-    </form>
+    <div>
+        <input type="text" name="title" placeholder="Название" value="{{ title_text }}" required>
+        <input type="text" name="type" placeholder="Тип" value="{{ type_text }}" required>
+    </div>
+    <div>
+        <input type="time" name="start" value="{{ start_text }}" required>-
+        <input type="time" name="end" value="{{ end_text }}" required>
+    </div>
+    <input type="submit" value="{{ page_title }}" required>
+</form>
     <h2>{{inf}}</h2>
 </body>
 {% endblock %}

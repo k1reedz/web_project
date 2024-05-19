@@ -29,6 +29,31 @@
     textarea.materialize-textarea {
       color: #ffffff; /* Белый цвет */
     }
+
+    /* Стиль для изображения профиля */
+    .profile-image {
+      max-width: 200%;
+      height: auto;
+      display: block;
+      margin: 10px 0;
+    }
+
+    /* Стиль для контейнера изображения */
+    .profile-image-container {
+      flex: 1;
+      text-align: center;
+    }
+
+    /* Стиль для карточки */
+    .card-content {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .card-text {
+      flex: 2;
+      color: white;
+    }
   </style>
 </head>
 <body style="background: rgb(33,33,33)">
@@ -50,25 +75,27 @@
 <div class="container">
   <h3 style="color: white">Профиль пользователя</h3>
 
-<!-- Форма для отображения текущей информации о профиле -->
 <div class="row">
     <div class="col s12 m6">
         <div class="card" style="background-color: rgba(0, 0, 0, 0.1)">
             <div class="card-content">
-                <span class="card-title" style="color: white">Текущая информация о профиле</span>
-                <p style="color: white"><strong>Имя:</strong> {{ user.name }}</p>
-                <p style="color: white"><strong>Email:</strong> {{ user.email }}</p>
-                <p style="color: white"><strong>Возраст:</strong> {{ user.stats["age"] }}</p>
-                <p style="color: white"><strong>Пол:</strong> {{ user.stats["gender"] }}</p>
-                <!-- Adjust the style of this paragraph -->
-                <p style="color: white; white-space: pre-line; word-wrap: break-word; max-width: 100%;">{{ user.stats["about"] }}</p>
-                <img src="{{ url_for('static', filename='uploads/' + user.stats['profile_image']) }}" alt="Profile Image" style="max-width: 80%; float: right; margin-top: -186px">
+                <div class="card-text">
+                  <span class="card-title" style="color: white">Текущая информация о профиле</span>
+                  <p><strong>Имя:</strong> {{ user.name }}</p>
+                  <p><strong>Email:</strong> {{ user.email }}</p>
+                  <p><strong>Возраст:</strong> {{ user.stats["age"] }}</p>
+                  <p><strong>Пол:</strong> {{ user.stats["gender"] }}</p>
+                    <p><strong>Рост:</strong> {{ user.stats['height'] }}</p>
+                  <p style="white-space: pre-line; word-wrap: break-word; max-width: 100%;">{{ user.stats["about"] }}</p>
+                </div>
+                <div class="profile-image-container">
+                  <img src="{{ url_for('static', filename='uploads/' + user.stats['profile_image']) }}" alt="Profile Image" class="profile-image" style="border-radius: 5px;">
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-  <!-- Форма для обновления профиля -->
   <div class="row">
     <form class="col s12" method="post" enctype="multipart/form-data">
       <input type="hidden" name="user_id" value="{{ user.id }}">
@@ -109,7 +136,6 @@
           <label for="height">Рост</label>
         </div>
         <div class="input-field col s12">
-        <!-- Set the max-width for the text area and enable word wrapping -->
          <textarea id="about_me" class="materialize-textarea" name="about_me" style="max-width: 100%; width: 100%;" rows="4">{{ user.stats['about'] }}</textarea>
         <label for="about_me">О себе</label>
       </div>
@@ -130,9 +156,7 @@
   </div>
 </div>
 
-<!-- Scripts -->
 <script>
-  // Check if gender is not selected, then set it to male
   document.addEventListener('DOMContentLoaded', function() {
     var genderRadios = document.getElementsByName('gender');
     var isGenderSelected = false;
@@ -145,20 +169,14 @@
     }
 
     if (!isGenderSelected) {
-      // If no gender is selected, set it to male
       document.querySelector('input[name="gender"][value="Мужской"]').checked = true;
     }
   });
 </script>
 <script>
-  // Get the textarea element
   var textarea = document.getElementById('about_me');
-
-  // Add an event listener for input changes
   textarea.addEventListener('input', function () {
-    // Split the text content by every 39 characters and join it with a newline character
     var text = this.value.match(/.{1,39}/g).join('\n');
-    // Set the value of the textarea to the modified text
     this.value = text;
   });
 </script>
